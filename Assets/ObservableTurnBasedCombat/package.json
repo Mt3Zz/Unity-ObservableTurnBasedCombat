@@ -1,0 +1,7 @@
+{
+    "name": "Mt3Zz.observableturnbasedcombat",
+    "displayName": "ObservableTurnBasedCombat",
+    "version": "0.1.0",
+    "description": "Template method of turn-based Combat with observer pattern",
+    "unity": "2022.3"
+}
