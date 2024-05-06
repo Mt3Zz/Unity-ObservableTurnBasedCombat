@@ -1,0 +1,14 @@
+{
+    "name": "ObservableTurnBasedCombat.Presentation",
+    "rootNamespace": "ObservableTurnBasedCombat.Presentation",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

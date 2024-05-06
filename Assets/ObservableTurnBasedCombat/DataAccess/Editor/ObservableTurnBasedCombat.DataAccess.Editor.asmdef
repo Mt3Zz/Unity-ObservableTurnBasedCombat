@@ -1,0 +1,16 @@
+{
+    "name": "ObservableTurnBasedCombat.DataAccess.Editor",
+    "rootNamespace": "ObservableTurnBasedCombat.DataAccess",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Editor"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

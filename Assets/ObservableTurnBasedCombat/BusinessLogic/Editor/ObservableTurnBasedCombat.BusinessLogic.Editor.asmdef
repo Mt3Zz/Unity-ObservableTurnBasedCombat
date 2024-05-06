@@ -1,0 +1,16 @@
+{
+    "name": "ObservableTurnBasedCombat.BusinessLogic.Editor",
+    "rootNamespace": "ObservableTurnBasedCombat.BusinessLogic",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Editor"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
