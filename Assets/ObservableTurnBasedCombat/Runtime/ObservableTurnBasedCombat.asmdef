@@ -1,6 +1,6 @@
 {
-    "name": "ObservableTurnBasedCombat.Presentation",
-    "rootNamespace": "ObservableTurnBasedCombat.Presentation",
+    "name": "ObservableTurnBasedCombat",
+    "rootNamespace": "ObservableTurnBasedCombat",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
