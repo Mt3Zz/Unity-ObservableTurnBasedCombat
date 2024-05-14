@@ -2,6 +2,9 @@
     "name": "ObservableTurnBasedCombat.Tests.PlayMode",
     "rootNamespace": "ObservableTurnBasedCombat.Tests.PlayMode",
     "references": [
+        "GUID:a7b2c5efd2d86ac42b3c0a6181f27ae0",
+        "GUID:77221876cc6b8244180b96e320b1bcd4",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:0acc523941302664db1f4e527237feb3",
         "GUID:27619889b8ba8c24980f49ee34dbb44a"
     ],

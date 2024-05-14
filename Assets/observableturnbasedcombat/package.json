@@ -3,5 +3,9 @@
   "version": "0.1.0",
   "description": "Template method of turn-based Combat with observer pattern",
   "displayName": "ObservableTurnBasedCombat",
-  "unity": "2022.3"
+  "unity": "2022.3",
+  "dependencies": {
+    "com.cysharp.r3": "",
+    "com.cysharp.unitask": ""
+  }
 }
