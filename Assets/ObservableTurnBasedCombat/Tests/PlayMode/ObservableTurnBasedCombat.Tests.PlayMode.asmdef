@@ -13,6 +13,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
+        "R3.dll",
         "nunit.framework.dll"
     ],
     "autoReferenced": true,

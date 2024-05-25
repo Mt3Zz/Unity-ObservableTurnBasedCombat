@@ -1,35 +1,130 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
-
-
-/*
- * Test List
- * 
- */
+﻿using NUnit.Framework;
+using R3;
 
 
 namespace ObservableTurnBasedCombat.Tests.PlayMode
 {
+    using BusinessLogic;
+
+
+    [TestFixture]
     public class CombatJobTest
     {
-        // A Test behaves as an ordinary method
+        // BeforeExecuteメソッドが1回呼び出されることを確認するテスト
         [Test]
-        public void CombatJobTestSimplePasses()
+        public void BeforeExecute_CallsMethodOnce_ListenOnce()
         {
-            // Use the Assert class to test conditions
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.BeforeExecute.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.BeforeExecute();
+
+            // Assert
+            Assert.AreEqual(1, count);
         }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator CombatJobTestWithEnumeratorPasses()
+        // BeforeExecuteメソッドが2回呼び出されることを確認するテスト
+        [Test]
+        public void BeforeExecute_CallsMethodTwice_ListenTwice()
         {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.BeforeExecute.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.BeforeExecute();
+            job.BeforeExecute();
+
+            // Assert
+            Assert.AreEqual(2, count);
+        }
+
+        // Executeメソッドが1回呼び出されることを確認するテスト
+        [Test]
+        public void Execute_CallsMethodOnce_ListenOnce()
+        {
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.Execute.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.Execute();
+
+            // Assert
+            Assert.AreEqual(1, count);
+        }
+
+        // Executeメソッドが2回呼び出されることを確認するテスト
+        [Test]
+        public void Execute_CallsMethodTwice_ListenTwice()
+        {
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.Execute.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.Execute();
+            job.Execute();
+
+            // Assert
+            Assert.AreEqual(2, count);
+        }
+
+        // Completeメソッドが1回呼び出されることを確認するテスト
+        [Test]
+        public void Complete_CallsMethodOnce_ListenOnce()
+        {
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.Complete.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.Complete();
+
+            // Assert
+            Assert.AreEqual(1, count);
+        }
+
+        // Completeメソッドが2回呼び出されることを確認するテスト
+        [Test]
+        public void Complete_CallsMethodTwice_ListenTwice()
+        {
+            // Arrange
+            var count = 0;
+            var job = new FakeCombatJob();
+            job.ObservableMethods.Complete.Subscribe(_ =>
+            {
+                count++;
+            });
+
+            // Act
+            job.Complete();
+            job.Complete();
+
+            // Assert
+            Assert.AreEqual(2, count);
         }
     }
 }
