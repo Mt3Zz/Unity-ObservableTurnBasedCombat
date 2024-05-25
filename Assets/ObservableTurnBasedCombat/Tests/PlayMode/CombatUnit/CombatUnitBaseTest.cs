@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
@@ -6,24 +6,24 @@ using UnityEngine.TestTools;
 
 
 /* Test List
-- [] ƒ†ƒjƒbƒg‚Í‘®«iAttributej‚ğ‚Â
-    - [] ƒ†ƒjƒbƒg‹¤’Ê‚Ì‘®«‚ğ‚Â
-    - [] ƒ†ƒjƒbƒg•Ê‚Ì‘®«‚ğ‚Â
+- [] ãƒ¦ãƒ‹ãƒƒãƒˆã¯å±æ€§ï¼ˆAttributeï¼‰ã‚’æŒã¤
+    - [] ãƒ¦ãƒ‹ãƒƒãƒˆå…±é€šã®å±æ€§ã‚’æŒã¤
+    - [] ãƒ¦ãƒ‹ãƒƒãƒˆå›ºæœ‰ã®å±æ€§ã‚’æŒã¤
 
-- [] ƒ†ƒjƒbƒg‚ÍƒXƒe[ƒ^ƒXiStatsj‚ğ‚Â
-    - [] ƒ†ƒjƒbƒg‹¤’Ê‚ÌƒXƒe[ƒ^ƒX‚ğ‚Â
-    - [] ƒ†ƒjƒbƒg•Ê‚ÌƒXƒe[ƒ^ƒX‚ğ‚Â
+- [] ãƒ¦ãƒ‹ãƒƒãƒˆã¯ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼ˆStatsï¼‰ã‚’æŒã¤
+    - [] ãƒ¦ãƒ‹ãƒƒãƒˆå…±é€šã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æŒã¤
+    - [] ãƒ¦ãƒ‹ãƒƒãƒˆå›ºæœ‰ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æŒã¤
 
-- [] ƒ†ƒjƒbƒg‚ÍƒoƒtEƒfƒoƒt‚ğ‚Â
+- [] ãƒ¦ãƒ‹ãƒƒãƒˆã¯ãƒãƒ•ãƒ»ãƒ‡ãƒãƒ•ã‚’æŒã¤
     - [] 
     - [] 
 
 
-- [] ƒ_ƒ[ƒWŒvZ®‚É‰‚¶‚ÄHP‚ğŒ¸‚ç‚·
-- [] HP‚ª0‚Å‚ ‚é‚±‚Æ‚ğ”»’è‚·‚é
+- [] ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—å¼ã«å¿œã˜ã¦HPã‚’æ¸›ã‚‰ã™
+- [] HPãŒ0ã§ã‚ã‚‹ã“ã¨ã‚’åˆ¤å®šã™ã‚‹
 
-- [] ƒoƒt‚Ì—Ê‚É‰‚¶‚ÄƒXƒe[ƒ^ƒX‚ğ‘‚â‚·
-- [] ƒfƒoƒt‚Ì—Ê‚É‰‚¶‚ÄƒXƒe[ƒ^ƒX‚ğŒ¸‚ç‚·
+- [] ãƒãƒ•ã®é‡ã«å¿œã˜ã¦ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å¢—ã‚„ã™
+- [] ãƒ‡ãƒãƒ•ã®é‡ã«å¿œã˜ã¦ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æ¸›ã‚‰ã™
 
 */
 
@@ -32,21 +32,6 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
 {
     public class CombatUnitBaseTest
     {
-        // A Test behaves as an ordinary method
-        [Test]
-        public void CombatUnitBaseTestSimplePasses()
-        {
-            // Use the Assert class to test conditions
-        }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator CombatUnitBaseTestWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
-        }
     }
 }
