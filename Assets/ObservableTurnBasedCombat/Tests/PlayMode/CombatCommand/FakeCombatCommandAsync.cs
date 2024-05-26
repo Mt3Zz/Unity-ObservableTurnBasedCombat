@@ -5,7 +5,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
     using BusinessLogic;
 
 
-    internal class FakeCombatJob : CombatJobBase
+    internal class FakeCombatCommandAsync : BaseCombatCommandAsync
     {
         protected override void OnBeforeExecute() { }
         protected override void OnExecute() { }

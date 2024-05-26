@@ -14,7 +14,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         public int CompleteCallCount { get; private set; }
 
 
-        public FakeObserver(CombatJobBase action) : base(action)
+        public FakeObserver(BaseCombatCommandAsync action) : base(action)
         {
             BeforeExecuteCallCount = 0;
             ExecuteCallCount = 0;

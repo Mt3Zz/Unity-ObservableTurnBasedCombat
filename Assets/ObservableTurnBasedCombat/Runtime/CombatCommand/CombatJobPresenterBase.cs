@@ -6,9 +6,9 @@ namespace ObservableTurnBasedCombat.BusinessLogic
 {
     public abstract class CombatJobPresenterBase
     {
-        private readonly CombatJobBase _job;
+        private readonly BaseCombatCommandAsync _job;
 
-        public CombatJobPresenterBase(CombatJobBase job)
+        public CombatJobPresenterBase(BaseCombatCommandAsync job)
         {
             _job = job;
             /*

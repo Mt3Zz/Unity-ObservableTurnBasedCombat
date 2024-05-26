@@ -7,7 +7,7 @@ namespace ObservableTurnBasedCombat.BusinessLogic
     /// 戦闘コマンドの抽象クラスです。
     /// 戦闘における行動の基本的な構造を提供します。
     /// </summary>
-    public abstract class CombatJobBase : IDisposable
+    public abstract class BaseCombatCommandAsync : IDisposable
     {
         // BeforeExecute、Execute、Completeの各イベントを発行するためのSubject
         private readonly Subject<Unit> _beforeExecuteSubject = new Subject<Unit>();

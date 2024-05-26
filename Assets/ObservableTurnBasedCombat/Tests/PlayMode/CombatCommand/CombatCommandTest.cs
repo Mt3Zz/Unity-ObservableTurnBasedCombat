@@ -8,7 +8,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
 
 
     [TestFixture]
-    public class CombatJobTest
+    public class CombatCommandTest
     {
         // BeforeExecuteメソッドが1回呼び出されることを確認するテスト
         [Test]
@@ -16,7 +16,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.BeforeExecute.Subscribe(_ =>
             {
                 count++;
@@ -35,7 +35,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.BeforeExecute.Subscribe(_ =>
             {
                 count++;
@@ -55,7 +55,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.Execute.Subscribe(_ =>
             {
                 count++;
@@ -74,7 +74,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.Execute.Subscribe(_ =>
             {
                 count++;
@@ -94,7 +94,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.Complete.Subscribe(_ =>
             {
                 count++;
@@ -113,7 +113,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
         {
             // Arrange
             var count = 0;
-            var job = new FakeCombatJob();
+            var job = new FakeCombatCommandAsync();
             job.ObservableMethods.Complete.Subscribe(_ =>
             {
                 count++;
