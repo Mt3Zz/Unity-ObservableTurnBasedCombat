@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+
+
 namespace ObservableTurnBasedCombat
 {
-    internal class CommandId : AbstractCombatId
+    public sealed class CommandId : AbstractCombatId
     {
         public CommandId(int id, string name) : base(id, name) { }
     }
