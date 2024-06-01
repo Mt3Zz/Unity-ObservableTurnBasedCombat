@@ -8,6 +8,20 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
 {
     public class ICombatCommandEffectAsyncTest
     {
+        [Test]
+        public void Id_SameId_SameInstance()
+        {
+            // Arrange
+            var effect = new FakeCombatCommandEffectAsync();
+            var exceptedId = new CommandEffectId(1, "Test");
+
+            // Act
+            // Nothing to do
+
+            // Assert
+            Assert.That(effect.Id.Equals(exceptedId));
+        }
+
         [UnityTest]
         public IEnumerator BeforeExecute_CallsMethod_Normal() => 
             UniTask.ToCoroutine(async () =>

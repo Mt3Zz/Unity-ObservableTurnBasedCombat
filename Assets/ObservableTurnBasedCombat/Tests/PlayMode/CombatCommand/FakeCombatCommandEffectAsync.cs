@@ -3,13 +3,18 @@ using System.Threading;
 
 namespace ObservableTurnBasedCombat.Tests.PlayMode
 {
-    using System.Diagnostics;
     using BusinessLogic;
-
+    using System.Runtime.InteropServices;
 
     public class FakeCombatCommandEffectAsync : ICombatCommandEffectAsync
     {
         public CommandEffectId Id { get; }
+
+        public FakeCombatCommandEffectAsync()
+        {
+            var id = new CommandEffectId(1, "Test");
+            Id = id;
+        }
 
         public async UniTask BeforeExecute(CancellationToken token)
         {
