@@ -158,7 +158,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
              });
 
         [UnityTest]
-        public IEnumerator BeforeExecute_CalledTwice_ThrowsInvalidOperationException() =>
+        public IEnumerator BeforeExecute_CallsTwice_ThrowsInvalidOperationException() =>
             UniTask.ToCoroutine(async () =>
             {
                 // Arrange
@@ -174,9 +174,9 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
                 var excepted = false;
 
                 // Act
-                // 1‰ñ–Ú‚ÌÀs
+                // 1ï¿½ï¿½Ú‚Ìï¿½ï¿½s
                 await combatCommandAsync.BeforeExecute(cancelToken);
-                // 2‰ñ–Ú‚ÌÀs
+                // 2ï¿½ï¿½Ú‚Ìï¿½ï¿½s
                 try
                 {
                     await combatCommandAsync.BeforeExecute(cancelToken);

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,54 +7,60 @@ using Cysharp.Threading.Tasks;
 namespace ObservableTurnBasedCombat.BusinessLogic
 {
     /// <summary>
-    /// ”ñ“¯Šú‚ÅÀs‰Â”\‚Èí“¬ƒRƒ}ƒ“ƒh‚ğ•\‚·ƒNƒ‰ƒX‚Å‚·B
+    /// éåŒæœŸã§å®Ÿè¡Œå¯èƒ½ãªæˆ¦é—˜ã‚³ãƒãƒ³ãƒ‰ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
     /// </summary>
     public class CombatCommandAsync
     {
         /// <summary>
-        /// ƒRƒ}ƒ“ƒh‚ÌˆêˆÓ‚Ì¯•Êq‚ğæ“¾‚µ‚Ü‚·B
+        /// ã‚³ãƒãƒ³ãƒ‰ã®ä¸€æ„ã®è­˜åˆ¥å­ã‚’å–å¾—ã—ã¾ã™ã€‚
         /// </summary>
         public CommandId Id { get; }
 
         /// <summary>
-        /// ƒRƒ}ƒ“ƒh‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½Œø‰Ê‚Ì¯•Êq‚ÌƒŠƒXƒg‚ğæ“¾‚µ‚Ü‚·B
+        /// ã‚³ãƒãƒ³ãƒ‰ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸåŠ¹æœã®è­˜åˆ¥å­ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
         /// </summary>
         public List<CommandEffectId> EffectIds { get; }
 
-        readonly Dictionary<CommandEffectId, ICombatCommandEffectAsync> _commandEffects;
+        protected readonly Dictionary<CommandEffectId, ICombatCommandEffectAsync> _commandEffects;
 
         protected enum CommandState
         {
-            NotStarted, // ‚Ü‚¾Às‚³‚ê‚Ä‚¢‚È‚¢ó‘Ô
-            BeforeExecuteCalled, // BeforeExecute ‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô
-            ExecuteCalled, // Execute ‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô
-            Completed // Complete ‚ªŒÄ‚Ño‚³‚ê‚½ó‘Ô
+            NotStarted, // ã¾ã å®Ÿè¡Œã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹
+            BeforeExecuteCalled, // BeforeExecute ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹
+            ExecuteCalled, // Execute ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹
+            Completed // Complete ãŒå‘¼ã³å‡ºã•ã‚ŒãŸçŠ¶æ…‹
         }
-        private CommandState _state = CommandState.NotStarted;
+        protected CommandState _state = CommandState.NotStarted;
 
 
         /// <summary>
-        /// <see cref="CombatCommandAsync"/> ‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ‰Šú‰»‚µ‚Ü‚·B
+        /// <see cref="CombatCommandAsync"/> ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
         /// </summary>
-        /// <param name="id">ƒRƒ}ƒ“ƒh‚ÌˆêˆÓ‚Ì¯•ÊqB</param>
-        /// <param name="commandEffects">ƒRƒ}ƒ“ƒh‚ÉŠÖ˜A•t‚¯‚ç‚ê‚½Œø‰Ê‚ÌƒŠƒXƒgB</param>
+        /// <param name="id">ã‚³ãƒãƒ³ãƒ‰ã®ä¸€æ„ã®è­˜åˆ¥å­ã€‚</param>
+        /// <param name="commandEffects">ã‚³ãƒãƒ³ãƒ‰ã«é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸåŠ¹æœã®ãƒªã‚¹ãƒˆã€‚</param>
         public CombatCommandAsync(CommandId id, List<ICombatCommandEffectAsync> commandEffects)
         {
             Id = id;
             EffectIds = commandEffects.Select(ce => ce.Id).ToList();
             _commandEffects = commandEffects.ToDictionary(ce => ce.Id, ce => ce);
         }
+        public CombatCommandAsync(CombatCommandAsync command)
+        {
+            Id = command.Id;
+            EffectIds = command.EffectIds;
+            _commandEffects = command._commandEffects;
+        }
 
         /// <summary>
-        /// ƒRƒ}ƒ“ƒh‚ÌÀs‘O‚ÉÀs‚·‚é”ñ“¯Šúˆ—‚ğŠJn‚µ‚Ü‚·B
+        /// ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œå‰ã«å®Ÿè¡Œã™ã‚‹éåŒæœŸå‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™ã€‚
         /// </summary>
-        /// <param name="token">ˆ—‚ğƒLƒƒƒ“ƒZƒ‹‚·‚é‚½‚ß‚Ìƒg[ƒNƒ“B</param>
-        /// <returns>”ñ“¯Šú‘€ì‚ğ•\‚·ƒ^ƒXƒNB</returns>
-        /// <exception cref="InvalidOperationException">BeforeExecute ‚ğ 2 ‰ñˆÈãŒÄ‚Ño‚·‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB</exception>
+        /// <param name="token">å‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãŸã‚ã®ãƒˆãƒ¼ã‚¯ãƒ³ã€‚</param>
+        /// <returns>éåŒæœŸæ“ä½œã‚’è¡¨ã™ã‚¿ã‚¹ã‚¯ã€‚</returns>
+        /// <exception cref="InvalidOperationException">BeforeExecute ã‚’ 2 å›ä»¥ä¸Šå‘¼ã³å‡ºã™ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚</exception>
         public async UniTask BeforeExecute(CancellationToken token)
         {
             if (_state != CommandState.NotStarted)
-                throw new InvalidOperationException("BeforeExecute‚ÍŠù‚ÉŒÄ‚Ño‚³‚ê‚Ä‚¢‚Ü‚·");
+                throw new InvalidOperationException("BeforeExecuteã¯æ—¢ã«å‘¼ã³å‡ºã•ã‚Œã¦ã„ã¾ã™");
 
             await ProcessEffects(token, action => action.BeforeExecute(token));
 
@@ -62,15 +68,15 @@ namespace ObservableTurnBasedCombat.BusinessLogic
         }
 
         /// <summary>
-        /// ƒRƒ}ƒ“ƒh‚ÌÀsˆ—‚ğŠJn‚µ‚Ü‚·B
+        /// ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œå‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™ã€‚
         /// </summary>
-        /// <param name="token">ˆ—‚ğƒLƒƒƒ“ƒZƒ‹‚·‚é‚½‚ß‚Ìƒg[ƒNƒ“B</param>
-        /// <returns>”ñ“¯Šú‘€ì‚ğ•\‚·ƒ^ƒXƒNB</returns>
-        /// <exception cref="InvalidOperationException">Execute ‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚©A‚Ü‚½‚Í‡”Ô‚ÉŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÉƒXƒ[‚³‚ê‚Ü‚·B</exception>
+        /// <param name="token">å‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãŸã‚ã®ãƒˆãƒ¼ã‚¯ãƒ³ã€‚</param>
+        /// <returns>éåŒæœŸæ“ä½œã‚’è¡¨ã™ã‚¿ã‚¹ã‚¯ã€‚</returns>
+        /// <exception cref="InvalidOperationException">Execute ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã‹ã€ã¾ãŸã¯é †ç•ªã«å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã¾ã™ã€‚</exception>
         public async UniTask Execute(CancellationToken token)
         {
             if (_state != CommandState.BeforeExecuteCalled)
-                throw new InvalidOperationException("BeforeExecute‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚©A‚·‚Å‚ÉÀsÏ‚İ‚Å‚·");
+                throw new InvalidOperationException("BeforeExecuteãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã‹ã€ã™ã§ã«å®Ÿè¡Œæ¸ˆã¿ã§ã™");
 
             await ProcessEffects(token, action => action.Execute(token));
 
@@ -78,15 +84,15 @@ namespace ObservableTurnBasedCombat.BusinessLogic
         }
 
         /// <summary>
-        /// ƒRƒ}ƒ“ƒh‚ÌÀsŠ®—¹Œã‚ÉÀs‚·‚é”ñ“¯Šúˆ—‚ğŠJn‚µ‚Ü‚·B
+        /// ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œå®Œäº†å¾Œã«å®Ÿè¡Œã™ã‚‹éåŒæœŸå‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™ã€‚
         /// </summary>
-        /// <param name="token">ˆ—‚ğƒLƒƒƒ“ƒZƒ‹‚·‚é‚½‚ß‚Ìƒg[ƒNƒ“B</param>
-        /// <returns>”ñ“¯Šú‘€ì‚ğ•\‚·ƒ^ƒXƒNB</returns>
-        /// <exception cref="InvalidOperationException">Complete ‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚©A‚Ü‚½‚Í‡”Ô‚ÉŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÉƒXƒ[‚³‚ê‚Ü‚·B</exception>
+        /// <param name="token">å‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã™ã‚‹ãŸã‚ã®ãƒˆãƒ¼ã‚¯ãƒ³ã€‚</param>
+        /// <returns>éåŒæœŸæ“ä½œã‚’è¡¨ã™ã‚¿ã‚¹ã‚¯ã€‚</returns>
+        /// <exception cref="InvalidOperationException">Complete ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã‹ã€ã¾ãŸã¯é †ç•ªã«å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„å ´åˆã«ã‚¹ãƒ­ãƒ¼ã•ã‚Œã¾ã™ã€‚</exception>
         public async UniTask Complete(CancellationToken token)
         {
             if (_state != CommandState.ExecuteCalled)
-                throw new InvalidOperationException("Execute‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚©A‚·‚Å‚ÉÀsÏ‚İ‚Å‚·");
+                throw new InvalidOperationException("ExecuteãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã‹ã€ã™ã§ã«å®Ÿè¡Œæ¸ˆã¿ã§ã™");
 
             await ProcessEffects(token, action => action.Complete(token));
 
