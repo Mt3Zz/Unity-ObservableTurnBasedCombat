@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 
 
-namespace ObservableTurnBasedCombat.Tests.PlayMode
+namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatId
 {
     public class AbstractCombatIdTests
     {

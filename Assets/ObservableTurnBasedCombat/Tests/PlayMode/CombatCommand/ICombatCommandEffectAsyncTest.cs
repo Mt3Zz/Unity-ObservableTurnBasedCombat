@@ -4,7 +4,7 @@ using UnityEngine.TestTools;
 using System.Collections;
 using System.Threading;
 
-namespace ObservableTurnBasedCombat.Tests.PlayMode
+namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 {
     public class ICombatCommandEffectAsyncTest
     {
