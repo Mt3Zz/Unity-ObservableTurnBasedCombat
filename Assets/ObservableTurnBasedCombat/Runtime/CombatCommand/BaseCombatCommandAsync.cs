@@ -20,17 +20,9 @@ namespace ObservableTurnBasedCombat.Application
         /// </summary>
         public CommandMetadata Metadata { get; protected set; } = new CommandMetadata();
 
+
         protected List<ICombatCommandEffectAsync> _effects;
-
-
-        protected enum ProgressState
-        {
-            NotStarted, // まだ実行されていない状態
-            BeforeExecuteCalled, // BeforeExecute が呼び出された状態
-            ExecuteCalled, // Execute が呼び出された状態
-            Completed // Complete が呼び出された状態
-        }
-        protected ProgressState _state = ProgressState.NotStarted;
+        protected CommandProgressState _state => Metadata.ProgressState;
 
 
         /// <summary>
@@ -60,12 +52,12 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">BeforeExecute を 2 回以上呼び出すことはできません。</exception>
         public async UniTask BeforeExecute(CancellationToken token)
         {
-            if (_state != ProgressState.NotStarted)
+            if (!_state.Equals(CommandProgressState.NotStarted))
                 throw new InvalidOperationException("BeforeExecuteは既に呼び出されています");
 
             await ProcessEffects(token, action => action.BeforeExecute(token));
 
-            _state = ProgressState.BeforeExecuteCalled;
+            Metadata.SetProgressState(CommandProgressState.BeforeExecuted);
         }
 
         /// <summary>
@@ -76,12 +68,12 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">Execute が呼び出されていないか、または順番に呼び出されていない場合にスローされます。</exception>
         public async UniTask Execute(CancellationToken token)
         {
-            if (_state != ProgressState.BeforeExecuteCalled)
+            if (!_state.Equals(CommandProgressState.BeforeExecuted))
                 throw new InvalidOperationException("BeforeExecuteが呼び出されていないか、すでに実行済みです");
 
             await ProcessEffects(token, action => action.Execute(token));
 
-            _state = ProgressState.ExecuteCalled;
+            Metadata.SetProgressState(CommandProgressState.Executed);
         }
 
         /// <summary>
@@ -92,12 +84,12 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">Complete が呼び出されていないか、または順番に呼び出されていない場合にスローされます。</exception>
         public async UniTask Complete(CancellationToken token)
         {
-            if (_state != ProgressState.ExecuteCalled)
+            if (!_state.Equals(CommandProgressState.Executed))
                 throw new InvalidOperationException("Executeが呼び出されていないか、すでに実行済みです");
 
             await ProcessEffects(token, action => action.Complete(token));
 
-            _state = ProgressState.Completed;
+            Metadata.SetProgressState(CommandProgressState.Completed);
         }
 
         private async UniTask ProcessEffects(CancellationToken token, Func<ICombatCommandEffectAsync, UniTask> action)

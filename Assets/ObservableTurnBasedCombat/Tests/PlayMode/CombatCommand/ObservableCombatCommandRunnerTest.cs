@@ -147,20 +147,166 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
                  Assert.That(expected == result);
              });
 
-        /*
+
+        [UnityTest]
+        public IEnumerator RunAsync_BeforeExecutedCommand_SubscribeExcludingBeforeExecute() =>
+             UniTask.ToCoroutine(async () =>
+             {
+                 // Arrange
+                 var runner = new ObservableCombatCommandRunner();
+                 var id = new CommandId(1, "Test");
+                 var combatCommandAsync = new FakeCombatCommandAsync(id);
+
+                 runner.Initialize(combatCommandAsync);
+
+                 var result = "";
+                 var expected =
+                     $"Execute : {id.GetHashCode()}\n" +
+                     $"Complete : {id.GetHashCode()}\n";
+
+                 var cancelToken = new CancellationTokenSource().Token;
+
+
+                 // Act
+                 // Ž–‘O‚ÉBeforeExecute‚ðŽÀs
+                 await runner.Command.BeforeExecute(cancelToken);
+
+                 // w“Ç
+                 runner.ObservableEvents.BeforeExecute.Subscribe(metadata =>
+                 {
+                     result += $"BeforeExecute : {metadata.Id.GetHashCode()}\n";
+                 });
+                 runner.ObservableEvents.Execute.Subscribe(metadata =>
+                 {
+                     result += $"Execute : {metadata.Id.GetHashCode()}\n";
+                 });
+                 runner.ObservableEvents.Complete.Subscribe(metadata =>
+                 {
+                     result += $"Complete : {metadata.Id.GetHashCode()}\n";
+                 });
+
+                 // ŽÀs
+                 await runner.RunAsync(cancelToken);
+
+
+                 // Assert
+                 Assert.That(expected == result);
+             });
+
+
+        [UnityTest]
+        public IEnumerator RunAsync_RunAndCancelAndRun_SubscribeInOrder() =>
+             UniTask.ToCoroutine(async () =>
+             {
+                 // Arrange
+                 var runner = new ObservableCombatCommandRunner();
+                 var id = new CommandId(1, "Test");
+                 var combatCommandAsync = new FakeCombatCommandAsync(id);
+
+                 runner.Initialize(combatCommandAsync);
+
+                 var result = "";
+                 var expected =
+                     $"BeforeExecute : {id.GetHashCode()}\n" +
+                     $"Execute : {id.GetHashCode()}\n" +
+                     $"Complete : {id.GetHashCode()}\n";
+
+                 var cancelToken = new CancellationTokenSource();
+
+
+                 // Act
+                 // w“Ç
+                 runner.ObservableEvents.BeforeExecute.Subscribe(metadata =>
+                 {
+                     result += $"BeforeExecute : {metadata.Id.GetHashCode()}\n";
+                 });
+                 runner.ObservableEvents.Execute.Subscribe(metadata =>
+                 {
+                     result += $"Execute : {metadata.Id.GetHashCode()}\n";
+                 });
+                 runner.ObservableEvents.Complete.Subscribe(metadata =>
+                 {
+                     result += $"Complete : {metadata.Id.GetHashCode()}\n";
+                 });
+
+                 // ŽÀs
+                 await runner.RunAsync(cancelToken.Token);
+                 cancelToken.Cancel();
+                 await runner.RunAsync(cancelToken.Token);
+
+
+                 // Assert
+                 Assert.That(expected == result);
+             });
+
+
         [Test]
-        public void Running_SetToTrue_Test()
+        public void Initialize_NotStartedCommand_Success()
         {
             // Arrange
             var runner = new ObservableCombatCommandRunner();
+            var id = new CommandId(1, "Test");
+            var combatCommandAsync = new FakeCombatCommandAsync(id);
+
+            var expected = true;
 
 
             // Act
-            runner.Running = true;
+            var result = runner.Initialize(combatCommandAsync);
 
 
-            //Assert
-            Assert.That(true == runner.Running);
-        }*/
+            // Assert
+            Assert.That(expected == result);
+        }
+
+
+        [UnityTest]
+        public IEnumerator Initialize_BeforeExecutedCommand_Failure() =>
+             UniTask.ToCoroutine(async () =>
+             {
+                 // Arrange
+                 var runner = new ObservableCombatCommandRunner();
+                 var id = new CommandId(1, "Test");
+                 var combatCommandAsync = new FakeCombatCommandAsync(id);
+                 runner.Initialize(combatCommandAsync);
+
+                 var cancelToken = new CancellationTokenSource().Token;
+
+                 var expected = false;
+
+
+                 // Act
+                 await runner.Command.BeforeExecute(cancelToken);
+                 var result = runner.Initialize(combatCommandAsync);
+
+
+                 // Assert
+                 Assert.That(expected == result);
+             });
+
+
+        [UnityTest]
+        public IEnumerator Initialize_CompletedCommand_Saccess() =>
+             UniTask.ToCoroutine(async () =>
+             {
+                 // Arrange
+                 var runner = new ObservableCombatCommandRunner();
+                 var id = new CommandId(1, "Test");
+                 var combatCommandAsync = new FakeCombatCommandAsync(id);
+                 runner.Initialize(combatCommandAsync);
+
+                 var cancelToken = new CancellationTokenSource().Token;
+
+                 var expected = true;
+
+
+                 // Act
+                 await runner.RunAsync(cancelToken);
+                 var result = runner.Initialize(combatCommandAsync);
+
+
+                 // Assert
+                 Assert.That(expected == result);
+             });
     }
 }

@@ -59,19 +59,21 @@ namespace ObservableTurnBasedCombat.Application
             }
 
 
-            switch (_state)
+            if (_state.Equals(CommandProgressState.NotStarted)) { }
+            else if (_state.Equals(CommandProgressState.BeforeExecuted)) { }
+            else if (_state.Equals(CommandProgressState.Executed))
             {
-                case ProgressState.NotStarted:
-                case ProgressState.BeforeExecuteCalled:
-                    break;
-                case ProgressState.ExecuteCalled:
-                    if (interruption) return false;
-                    break;
-                case ProgressState.Completed:
-                    return false;
-                default:
-                    throw new NotImplementedException();
+                if (interruption) return false;
             }
+            else if (_state.Equals(CommandProgressState.Completed))
+            {
+                return false;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
 
             AdditionalCommand = new CombatCommandAsync(command);
             Interruption = interruption;
@@ -84,19 +86,22 @@ namespace ObservableTurnBasedCombat.Application
                 return false;
             }
 
-            switch (_state)
+
+            if (_state.Equals(CommandProgressState.NotStarted)) { }
+            else if (_state.Equals(CommandProgressState.BeforeExecuted)) { }
+            else if (_state.Equals(CommandProgressState.Executed))
             {
-                case ProgressState.NotStarted:
-                case ProgressState.BeforeExecuteCalled:
-                    break;
-                case ProgressState.ExecuteCalled:
-                    if (Interruption) return false;
-                    break;
-                case ProgressState.Completed:
-                    return false;
-                default:
-                    throw new NotImplementedException();
+                if (Interruption) return false;
             }
+            else if (_state.Equals(CommandProgressState.Completed))
+            {
+                return false;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
 
             AdditionalCommand = null;
             return true;
