@@ -61,13 +61,13 @@ namespace ObservableTurnBasedCombat.Application
 
             switch (_state)
             {
-                case CommandState.NotStarted:
-                case CommandState.BeforeExecuteCalled:
+                case ProgressState.NotStarted:
+                case ProgressState.BeforeExecuteCalled:
                     break;
-                case CommandState.ExecuteCalled:
+                case ProgressState.ExecuteCalled:
                     if (interruption) return false;
                     break;
-                case CommandState.Completed:
+                case ProgressState.Completed:
                     return false;
                 default:
                     throw new NotImplementedException();
@@ -86,13 +86,13 @@ namespace ObservableTurnBasedCombat.Application
 
             switch (_state)
             {
-                case CommandState.NotStarted:
-                case CommandState.BeforeExecuteCalled:
+                case ProgressState.NotStarted:
+                case ProgressState.BeforeExecuteCalled:
                     break;
-                case CommandState.ExecuteCalled:
+                case ProgressState.ExecuteCalled:
                     if (Interruption) return false;
                     break;
-                case CommandState.Completed:
+                case ProgressState.Completed:
                     return false;
                 default:
                     throw new NotImplementedException();

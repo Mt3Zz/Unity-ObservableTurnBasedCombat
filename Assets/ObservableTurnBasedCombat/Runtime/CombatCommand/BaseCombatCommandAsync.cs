@@ -12,25 +12,26 @@ namespace ObservableTurnBasedCombat.Application
     public class BaseCombatCommandAsync
     {
         /// <summary>
-        /// コマンドの一意の識別子を取得します。
+        /// コマンドの識別子を取得します。
         /// </summary>
-        public CommandId Id { get; }
-
+        public CommandId Id { get => Metadata.Id; }
         /// <summary>
-        /// コマンドに関連付けられた効果の識別子のリストを取得します。
+        /// コマンドのメタデータを取得します。
         /// </summary>
-        public List<CommandEffectId> EffectIds { get; }
+        public CommandMetadata Metadata { get => _editableMetadata; }
+        internal EditableCommandMetadata _editableMetadata = new EditableCommandMetadata();
 
-        protected readonly Dictionary<CommandEffectId, ICombatCommandEffectAsync> _commandEffects;
+        protected List<ICombatCommandEffectAsync> _effects;
 
-        protected enum CommandState
+
+        protected enum ProgressState
         {
             NotStarted, // まだ実行されていない状態
             BeforeExecuteCalled, // BeforeExecute が呼び出された状態
             ExecuteCalled, // Execute が呼び出された状態
             Completed // Complete が呼び出された状態
         }
-        protected CommandState _state = CommandState.NotStarted;
+        protected ProgressState _state = ProgressState.NotStarted;
 
 
         /// <summary>
@@ -40,15 +41,16 @@ namespace ObservableTurnBasedCombat.Application
         /// <param name="commandEffects">コマンドに関連付けられた効果のリスト。</param>
         public BaseCombatCommandAsync(CommandId id, List<ICombatCommandEffectAsync> commandEffects)
         {
-            Id = id;
-            EffectIds = commandEffects.Select(ce => ce.Id).ToList();
-            _commandEffects = commandEffects.ToDictionary(ce => ce.Id, ce => ce);
+            _editableMetadata.SetId(id);
+            _editableMetadata.SetEffectIds(commandEffects.Select(ce => ce.Id).ToList());
+
+            _effects = commandEffects;
         }
         public BaseCombatCommandAsync(BaseCombatCommandAsync command)
         {
-            Id = command.Id;
-            EffectIds = command.EffectIds;
-            _commandEffects = command._commandEffects;
+            _editableMetadata = command._editableMetadata;
+
+            _effects = command._effects;
         }
 
         /// <summary>
@@ -59,12 +61,12 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">BeforeExecute を 2 回以上呼び出すことはできません。</exception>
         public async UniTask BeforeExecute(CancellationToken token)
         {
-            if (_state != CommandState.NotStarted)
+            if (_state != ProgressState.NotStarted)
                 throw new InvalidOperationException("BeforeExecuteは既に呼び出されています");
 
             await ProcessEffects(token, action => action.BeforeExecute(token));
 
-            _state = CommandState.BeforeExecuteCalled;
+            _state = ProgressState.BeforeExecuteCalled;
         }
 
         /// <summary>
@@ -75,12 +77,12 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">Execute が呼び出されていないか、または順番に呼び出されていない場合にスローされます。</exception>
         public async UniTask Execute(CancellationToken token)
         {
-            if (_state != CommandState.BeforeExecuteCalled)
+            if (_state != ProgressState.BeforeExecuteCalled)
                 throw new InvalidOperationException("BeforeExecuteが呼び出されていないか、すでに実行済みです");
 
             await ProcessEffects(token, action => action.Execute(token));
 
-            _state = CommandState.ExecuteCalled;
+            _state = ProgressState.ExecuteCalled;
         }
 
         /// <summary>
@@ -91,18 +93,18 @@ namespace ObservableTurnBasedCombat.Application
         /// <exception cref="InvalidOperationException">Complete が呼び出されていないか、または順番に呼び出されていない場合にスローされます。</exception>
         public async UniTask Complete(CancellationToken token)
         {
-            if (_state != CommandState.ExecuteCalled)
+            if (_state != ProgressState.ExecuteCalled)
                 throw new InvalidOperationException("Executeが呼び出されていないか、すでに実行済みです");
 
             await ProcessEffects(token, action => action.Complete(token));
 
-            _state = CommandState.Completed;
+            _state = ProgressState.Completed;
         }
 
         private async UniTask ProcessEffects(CancellationToken token, Func<ICombatCommandEffectAsync, UniTask> action)
         {
             var taskList = new List<UniTask>();
-            foreach (var commandEffect in _commandEffects.Values)
+            foreach (var commandEffect in _effects)
             {
                 taskList.Add(action(commandEffect));
             }
