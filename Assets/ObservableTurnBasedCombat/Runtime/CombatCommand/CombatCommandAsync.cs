@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ObservableTurnBasedCombat.BusinessLogic
+namespace ObservableTurnBasedCombat.Application
 {
     /// <summary>
     /// 連続コマンドを表すクラスです。

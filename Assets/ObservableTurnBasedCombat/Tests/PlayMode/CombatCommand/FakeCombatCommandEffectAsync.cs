@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace ObservableTurnBasedCombat.Tests.PlayMode
 {
-    using BusinessLogic;
+    using Application;
     using System.Runtime.InteropServices;
 
     public class FakeCombatCommandEffectAsync : ICombatCommandEffectAsync

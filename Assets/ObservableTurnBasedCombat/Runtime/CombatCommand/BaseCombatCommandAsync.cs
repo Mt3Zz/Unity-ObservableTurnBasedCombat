@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace ObservableTurnBasedCombat.BusinessLogic
+namespace ObservableTurnBasedCombat.Application
 {
     /// <summary>
     /// 非同期で実行可能な戦闘コマンドを表すクラスです。

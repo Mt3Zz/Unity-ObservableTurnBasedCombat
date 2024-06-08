@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 {
-    using BusinessLogic;
+    using Application;
 
     public class BaseCombatCommandAsyncTest
     {
