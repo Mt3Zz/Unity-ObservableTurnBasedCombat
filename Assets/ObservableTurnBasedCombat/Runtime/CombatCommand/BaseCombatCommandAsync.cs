@@ -18,8 +18,7 @@ namespace ObservableTurnBasedCombat.Application
         /// <summary>
         /// コマンドのメタデータを取得します。
         /// </summary>
-        public CommandMetadata Metadata { get => _editableMetadata; }
-        internal EditableCommandMetadata _editableMetadata = new EditableCommandMetadata();
+        public CommandMetadata Metadata { get; protected set; } = new CommandMetadata();
 
         protected List<ICombatCommandEffectAsync> _effects;
 
@@ -41,14 +40,14 @@ namespace ObservableTurnBasedCombat.Application
         /// <param name="commandEffects">コマンドに関連付けられた効果のリスト。</param>
         public BaseCombatCommandAsync(CommandId id, List<ICombatCommandEffectAsync> commandEffects)
         {
-            _editableMetadata.SetId(id);
-            _editableMetadata.SetEffectIds(commandEffects.Select(ce => ce.Id).ToList());
+            Metadata.SetId(id);
+            Metadata.SetEffectIds(commandEffects.Select(ce => ce.Id).ToList());
 
             _effects = commandEffects;
         }
         public BaseCombatCommandAsync(BaseCombatCommandAsync command)
         {
-            _editableMetadata = command._editableMetadata;
+            Metadata = command.Metadata;
 
             _effects = command._effects;
         }
