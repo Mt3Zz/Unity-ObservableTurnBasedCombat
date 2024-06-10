@@ -17,12 +17,13 @@ namespace ObservableTurnBasedCombat.Application
         private ObservableList<CommandMetadata> _metadata = new ObservableList<CommandMetadata>();
         private List<CombatCommandAsync> _commands = new List<CombatCommandAsync>();
 
-
         public void Dispose()
         {
             // ObservableListのストリームソースをDisposeする
             // まだ
         }
+
+        public bool isEmpty { get { return _commands.Count == 0; } }
 
 
         public void Schedule(CombatCommandAsync command)

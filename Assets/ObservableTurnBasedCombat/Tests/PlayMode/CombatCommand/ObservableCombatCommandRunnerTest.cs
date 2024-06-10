@@ -8,6 +8,7 @@ using R3;
 namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 {
     using Application;
+    using System;
     using UnityEngine.Profiling.Memory.Experimental;
 
     public class ObservableCombatCommandRunnerTest
@@ -31,7 +32,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 
 
                  // Act
-                 runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(combatCommandAsync);
                  runner.ObservableEvents.BeforeExecute.Subscribe(metadata =>
                  {
                      result += $"BeforeExecute : {metadata.Id.GetHashCode()}\n";
@@ -78,7 +79,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 
 
                  // Act
-                 runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(combatCommandAsync);
                  runner.ObservableEvents.BeforeExecute.Subscribe(metadata =>
                  {
                      result += $"BeforeExecute : {metadata.Id.GetHashCode()}\n";
@@ -126,7 +127,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
                  // Act
                  combatCommandAsync.SetAdditionalCommand(interruptCommandAsync, true);
 
-                 runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(combatCommandAsync);
                  runner.ObservableEvents.BeforeExecute.Subscribe(metadata =>
                  {
                      result += $"BeforeExecute : {metadata.Id.GetHashCode()}\n";
@@ -157,7 +158,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
                  var id = new CommandId(1, "Test");
                  var combatCommandAsync = new FakeCombatCommandAsync(id);
 
-                 runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(combatCommandAsync);
 
                  var result = "";
                  var expected =
@@ -203,7 +204,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
                  var id = new CommandId(1, "Test");
                  var combatCommandAsync = new FakeCombatCommandAsync(id);
 
-                 runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(combatCommandAsync);
 
                  var result = "";
                  var expected =
@@ -241,72 +242,92 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
 
 
         [Test]
-        public void Initialize_NotStartedCommand_Success()
+        public void SetCommand_NotStartedCommand_Success()
         {
             // Arrange
             var runner = new ObservableCombatCommandRunner();
             var id = new CommandId(1, "Test");
             var combatCommandAsync = new FakeCombatCommandAsync(id);
 
-            var expected = true;
-
 
             // Act
-            var result = runner.Initialize(combatCommandAsync);
+            runner.SetCommand(combatCommandAsync);
 
 
             // Assert
-            Assert.That(expected == result);
+            Assert.That(true);
         }
 
 
         [UnityTest]
-        public IEnumerator Initialize_BeforeExecutedCommand_Failure() =>
+        public IEnumerator SetCommand_BeforeExecutedCommand_ThrowArgumentException() =>
              UniTask.ToCoroutine(async () =>
              {
                  // Arrange
                  var runner = new ObservableCombatCommandRunner();
                  var id = new CommandId(1, "Test");
-                 var combatCommandAsync = new FakeCombatCommandAsync(id);
-                 runner.Initialize(combatCommandAsync);
+                 var command = new FakeCombatCommandAsync(id);
 
                  var cancelToken = new CancellationTokenSource().Token;
 
-                 var expected = false;
-
 
                  // Act
-                 await runner.Command.BeforeExecute(cancelToken);
-                 var result = runner.Initialize(combatCommandAsync);
+                 await command.BeforeExecute(cancelToken);
 
 
                  // Assert
-                 Assert.That(expected == result);
+                 Assert.That
+                 (
+                     () => { runner.SetCommand(command); },
+                     Throws.TypeOf<ArgumentException>().With.Message.EqualTo("ステートがNotStarted以外のコマンドをセットすることはできません。")
+                 );
              });
 
 
         [UnityTest]
-        public IEnumerator Initialize_CompletedCommand_Saccess() =>
+        public IEnumerator SetCommand_ExecuteCommandMethodAndSetCommand_ThrowInvalidOperationException() =>
              UniTask.ToCoroutine(async () =>
              {
                  // Arrange
                  var runner = new ObservableCombatCommandRunner();
                  var id = new CommandId(1, "Test");
-                 var combatCommandAsync = new FakeCombatCommandAsync(id);
-                 runner.Initialize(combatCommandAsync);
 
                  var cancelToken = new CancellationTokenSource().Token;
 
-                 var expected = true;
-
 
                  // Act
-                 await runner.RunAsync(cancelToken);
-                 var result = runner.Initialize(combatCommandAsync);
+                 runner.SetCommand(new FakeCombatCommandAsync(id));
+                 await runner.Command.BeforeExecute(cancelToken);
 
 
                  // Assert
-                 Assert.That(expected == result);
+                 Assert.That
+                 (
+                     () => { runner.SetCommand(new FakeCombatCommandAsync(id)); },
+                     Throws.TypeOf<InvalidOperationException>().With.Message.EqualTo("実行中のコマンドを上書きすることはできません。")
+                 );
+             });
+
+
+        [UnityTest]
+        public IEnumerator SetCommand_RunAsyncAndSetCommand_Saccess() =>
+             UniTask.ToCoroutine(async () =>
+             {
+                 // Arrange
+                 var runner = new ObservableCombatCommandRunner();
+                 var id = new CommandId(1, "Test");
+
+                 var cancelToken = new CancellationTokenSource().Token;
+
+
+                 // Act
+                 runner.SetCommand(new FakeCombatCommandAsync(id));
+                 await runner.RunAsync(cancelToken);
+                 runner.SetCommand(new FakeCombatCommandAsync(id));
+
+
+                 // Assert
+                 Assert.That(true);
              });
     }
 }

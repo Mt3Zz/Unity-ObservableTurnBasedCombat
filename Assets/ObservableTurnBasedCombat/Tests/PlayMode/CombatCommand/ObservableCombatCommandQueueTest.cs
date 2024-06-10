@@ -41,5 +41,37 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatCommand
             //Debug.Log(result);
             Assert.That(expected == result);
         }
+
+
+        [Test]
+        public void Schedule_ScheduleCommandTwice_SubscribeAdd()
+        {
+            // Arrange
+            var queue = new ObservableCombatCommandQueue();
+
+            var id = new CommandId(1, "Test");
+            var command = new FakeCombatCommandAsync(id);
+            var result = "";
+            var expected =
+                $"Add Metadata[0] = {command.Id.GetHashCode()}" + "\n" +
+                $"Add Metadata[1] = {command.Id.GetHashCode()}" + "\n";
+            //Debug.Log(expected);
+
+
+            // Act
+            queue.CollectionEvents.ObserveAdd().Subscribe(metadata =>
+            {
+                result +=
+                $"Add Metadata[{metadata.Index}] = {metadata.Value.Id.GetHashCode()}\n";
+            });
+
+            queue.Schedule(command);
+            queue.Schedule(command);
+
+
+            // Assert
+            //Debug.Log(result);
+            Assert.That(expected == result);
+        }
     }
 }

@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using R3;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ObservableTurnBasedCombat.Application
 {
@@ -39,19 +40,29 @@ namespace ObservableTurnBasedCombat.Application
         public CombatCommandAsync Command { get; private set; }
 
 
-        public bool Initialize(CombatCommandAsync command)
+        public void SetCommand(CombatCommandAsync command)
         {
-            if 
-            (
-                command.Metadata.ProgressState.Equals(CommandProgressState.NotStarted) ||
-                command.Metadata.ProgressState.Equals(CommandProgressState.Completed)
+            if (!command.Metadata.ProgressState.Equals(CommandProgressState.NotStarted))
+            {
+                throw new ArgumentException("ステートがNotStarted以外のコマンドをセットすることはできません。");
+            }
 
-            )
+            if (Command == null)
             {
                 Command = command;
-                return true;
+                return;
             }
-            return false;
+
+            if
+            (
+                Command.Metadata.ProgressState.Equals(CommandProgressState.BeforeExecuted) ||
+                Command.Metadata.ProgressState.Equals(CommandProgressState.Executed)
+            )
+            {
+                throw new InvalidOperationException("実行中のコマンドを上書きすることはできません。");
+            }
+
+            Command = command;
         }
 
 
@@ -67,6 +78,10 @@ namespace ObservableTurnBasedCombat.Application
             {
                 _beforeExecuteSubject.OnNext(command.Metadata);
                 await command.BeforeExecute(token);
+            }
+            else
+            {
+                UnityEngine.Debug.Log($"実行済みのBeforeExecuteをスキップしました。");
             }
 
 
@@ -86,6 +101,10 @@ namespace ObservableTurnBasedCombat.Application
                 _executeSubject.OnNext(command.Metadata);
                 await command.Execute(token);
             }
+            else
+            {
+                UnityEngine.Debug.Log($"実行済みのExecuteをスキップしました。");
+            }
 
 
             // 追加コマンドのInterruptionがfalseなら、ここで再帰関数を実行
@@ -103,6 +122,10 @@ namespace ObservableTurnBasedCombat.Application
             {
                 _completeSubject.OnNext(command.Metadata);
                 await command.Complete(token);
+            }
+            else
+            {
+                UnityEngine.Debug.Log($"実行済みのCompleteをスキップしました。");
             }
         }
     }
