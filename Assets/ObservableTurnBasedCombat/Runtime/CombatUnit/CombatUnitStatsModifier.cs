@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ObservableTurnBasedCombat.BusinessLogic
+namespace ObservableTurnBasedCombat.Application
 {
-    public class UnitStats
+    public class CombatUnitStatsModifier
     {
 
     }
