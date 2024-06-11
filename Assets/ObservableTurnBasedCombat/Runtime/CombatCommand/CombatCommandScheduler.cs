@@ -10,27 +10,14 @@ namespace ObservableTurnBasedCombat.Application
 {
     public class CombatCommandScheduler : ScriptableObject
     {
-        [SerializeField] private bool _running = false;
+        public ObservableCombatCommandRunner Runner { get; private set; } = new ObservableCombatCommandRunner();
+        public ObservableCombatCommandQueue Queue { get; private set; } = new ObservableCombatCommandQueue();
 
-        public ObservableCombatCommandRunner Runner { get; private set; }
-        public ObservableCombatCommandQueue Queue { get; private set; }
-
-        private CancellationTokenSource _ctn;
+        private CancellationTokenSource _ctn = new CancellationTokenSource();
 
 
-        public void Awake()
+        public async UniTask RunAsync()
         {
-            Runner = new ObservableCombatCommandRunner();
-            Queue = new ObservableCombatCommandQueue();
-
-            _ctn = new CancellationTokenSource();
-        }
-
-
-        public async UniTask RunAsync() 
-        {
-            _running = true;
-
             while (!Queue.isEmpty)
             {
                 Runner.SetCommand(Queue.Dequeue());
@@ -39,10 +26,9 @@ namespace ObservableTurnBasedCombat.Application
         }
         public void Pause()
         {
-            _running = false;
             _ctn.Cancel();
+            _ctn.Dispose(); // Dispose the CancellationTokenSource to release resources
+            _ctn = new CancellationTokenSource(); // Create a new CancellationTokenSource for potential future use
         }
-
-
     }
 }
