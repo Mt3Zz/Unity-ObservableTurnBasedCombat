@@ -10,7 +10,7 @@ namespace ObservableTurnBasedCombat.Application
         public UnitMetadata Metadata { get; protected set; }
 
 
-        public List<ICombatUnitAttribute> Attributes { get; protected set; }
+        public ICombatUnitAttribute Attributes { get; protected set; } = new CombatUnitAttributes();
         public List<ICombatUnitStats> Stats { get; protected set; }
 
 
