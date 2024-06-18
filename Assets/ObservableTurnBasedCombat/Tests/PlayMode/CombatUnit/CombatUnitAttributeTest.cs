@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using System;
 using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 {
     using Application;
-    using System;
 
     public class CombatUnitAttributeTest
     {
@@ -65,7 +65,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
         }
 
 
-        [Test] public void Contains_SameId_True()
+        [Test] public void ContainsById_SameId_True()
         {
             // Arrange
             UnitAttributeId id = new UnitAttributeId(1, "Test");
@@ -73,13 +73,13 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attribute.Contains(id);
+            var result = attribute.ContainsById(id);
 
 
             // Assert
             Assert.That(result, Is.EqualTo(true));
         }
-        [Test] public void Contains_DifferentId_False()
+        [Test] public void ContainsById_DifferentId_False()
         {
             // Arrange
             UnitAttributeId id1 = new UnitAttributeId(1, "Test1");
@@ -89,7 +89,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attribute.Contains(id2);
+            var result = attribute.ContainsById(id2);
 
 
             // Assert
@@ -132,7 +132,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
             // Assert
             Assert.That
             (
-                () => { attribute.Remove(attribute); },
+                () => { attribute.RemoveById(id); },
                 Throws.TypeOf<InvalidOperationException>()
                 .With.Message.EqualTo("単体のアトリビュートからアトリビュートを削除することはできません。")
             );

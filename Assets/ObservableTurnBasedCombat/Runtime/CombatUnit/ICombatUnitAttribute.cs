@@ -9,11 +9,12 @@ namespace ObservableTurnBasedCombat.Application
 
 
         bool TryGetById(UnitAttributeId id, out ICombatUnitAttribute attribute);
-        bool Contains(UnitAttributeId id);
+        bool ContainsById(UnitAttributeId id);
+        bool RemoveById(UnitAttributeId id);
 
 
         void Add(ICombatUnitAttribute attribute);
-        void Remove(ICombatUnitAttribute attribute);
+        bool Contains(ICombatUnitAttribute attribute);
 
 
         //public abstract void Display();

@@ -1,22 +1,36 @@
+using ObservableTurnBasedCombat.Application;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace ObservableTurnBasedCombat.Application
+namespace ObservableTurnBasedCombat
 {
-    public class CombatUnitAttribute<T> : ICombatUnitAttribute
-        where T : struct
+    public class CombatUnitAttributes : ICombatUnitAttribute
     {
         public UnitAttributeId Id { get; protected set; }
-        public T Value { get; protected set; }
 
 
-        public CombatUnitAttribute(UnitAttributeId id)
+        private Dictionary<UnitAttributeId, ICombatUnitAttribute> _attributeById = new Dictionary<UnitAttributeId, ICombatUnitAttribute>();
+
+
+        public CombatUnitAttributes(UnitAttributeId id)
         {
             Id = id;
         }
-
+        public CombatUnitAttributes
+        (
+            UnitAttributeId id,
+            IEnumerable<ICombatUnitAttribute> attributes
+        ) 
+            : this(id)
+        {
+            foreach ( var attribute in attributes )
+            {
+                _attributeById.Add(attribute.Id, attribute);
+            }
+        }
 
         public bool TryGetById(UnitAttributeId id, out ICombatUnitAttribute attribute)
         {
@@ -26,28 +40,43 @@ namespace ObservableTurnBasedCombat.Application
                 return true;
             }
 
+
+            if (ContainsById(id))
+            {
+                attribute = _attributeById[id];
+                return true;
+            }
+
+
             attribute = null;
             return false;
         }
         public bool ContainsById(UnitAttributeId id)
         {
-            return Id.Equals(id);
+            return _attributeById.Keys.Contains(id);
         }
         public bool RemoveById(UnitAttributeId id)
         {
-            // 単体のアトリビュートでは削除をサポートしない
-            throw new InvalidOperationException("単体のアトリビュートからアトリビュートを削除することはできません。");
+            return _attributeById.Remove(id);
         }
 
         public bool Contains(ICombatUnitAttribute attribute)
         {
-            return Id.Equals(attribute.Id);
+            return ContainsById(attribute.Id);
         }
         public void Add(ICombatUnitAttribute attribute)
         {
-            // 単体のアトリビュートでは追加をサポートしない
-            throw new InvalidOperationException("単体のアトリビュートにアトリビュートを追加することはできません。");
+            try
+            {
+                _attributeById.Add(attribute.Id, attribute);
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.LogError("同じIdを持つアトリビュートを追加することはできません。");
+                throw ex;
+            }
         }
+
 
 
         /// <summary>
