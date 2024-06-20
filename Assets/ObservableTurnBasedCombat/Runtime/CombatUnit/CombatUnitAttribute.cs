@@ -29,7 +29,7 @@ namespace ObservableTurnBasedCombat.Application
             attribute = null;
             return false;
         }
-        public bool ContainsById(UnitAttributeId id)
+        public bool Contains(UnitAttributeId id)
         {
             return Id.Equals(id);
         }

@@ -11,7 +11,7 @@ namespace ObservableTurnBasedCombat.Application
 
 
         public ICombatUnitAttribute Attributes { get; protected set; }
-        public List<ICombatUnitStats> Stats { get; protected set; }
+        public ICombatUnitStat Stats { get; protected set; }
 
 
         public List<CombatUnitStatsModifier> StatsModifiers { get; protected set; }

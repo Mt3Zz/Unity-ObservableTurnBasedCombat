@@ -1,34 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStats : ICombatUnitStat
+    public class CombatUnitStat<T> : ICombatUnitStat
+        where T : struct
     {
         public UnitStatId Id { get; protected set; }
+        public T Value { get; protected set; }
 
 
-        private Dictionary<UnitStatId, ICombatUnitStat> _statById = new Dictionary<UnitStatId, ICombatUnitStat> ();
-
-
-        public CombatUnitStats(UnitStatId id)
+        public CombatUnitStat(UnitStatId id)
         {
             Id = id;
         }
-        public CombatUnitStats
-        (
-            UnitStatId id,
-            IEnumerable<ICombatUnitStat> stats
-        )
-            : this(id)
-        {
-            foreach (var stat in stats)
-            {
-                _statById.Add(stat.Id, stat);
-            }
-        }
+
 
         public bool TryGetById(UnitStatId id, out ICombatUnitStat stat)
         {
@@ -38,46 +26,32 @@ namespace ObservableTurnBasedCombat.Application
                 return true;
             }
 
-
-            if (Contains(id))
-            {
-                stat = _statById[id];
-                return true;
-            }
-
-
             stat = null;
             return false;
         }
         public bool Contains(UnitStatId id)
         {
-            return _statById.Keys.Contains(id);
+            return Id.Equals(id);
         }
         public bool RemoveById(UnitStatId id)
         {
-            return _statById.Remove(id);
+            // 単体のステータスでは削除をサポートしない
+            throw new InvalidOperationException("単体のステータスからステータスを削除することはできません。");
         }
 
         public bool Contains(ICombatUnitStat stat)
         {
-            return Contains(stat.Id);
+            return Id.Equals(stat.Id);
         }
         public void Add(ICombatUnitStat stat)
         {
-            try
-            {
-                _statById.Add(stat.Id, stat);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException("同じIdを持つステータスを追加することはできません。", ex);
-            }
+            // 単体のステータスでは追加をサポートしない
+            throw new InvalidOperationException("単体のステータスにステータスを追加することはできません。");
         }
 
 
-
         /// <summary>
-        /// 指定されたオブジェクトが現在の <c>CombatUnitStats</c> インスタンスと等しいかどうかを判断します。
+        /// 指定されたオブジェクトが現在の <c>AbstractCombatUnitStat</c> インスタンスと等しいかどうかを判断します。
         /// </summary>
         /// <param name="other">比較対象のオブジェクト</param>
         /// <returns>等しい場合は <c>true</c>、それ以外の場合は <c>false</c></returns>
@@ -92,7 +66,7 @@ namespace ObservableTurnBasedCombat.Application
         }
 
         /// <summary>
-        /// 指定されたオブジェクトが現在の <c>CombatUnitStats</c> インスタンスと等しいかどうかを判断します。
+        /// 指定されたオブジェクトが現在の <c>AbstractCombatUnitStat</c> インスタンスと等しいかどうかを判断します。
         /// </summary>
         /// <param name="obj">比較対象のオブジェクト</param>
         /// <returns>等しい場合は <c>true</c>、それ以外の場合は <c>false</c></returns>

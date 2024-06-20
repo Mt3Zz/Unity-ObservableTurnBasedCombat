@@ -123,7 +123,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attributes.ContainsById(id2);
+            var result = attributes.Contains(id2);
 
 
             // Assert
@@ -145,7 +145,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attributes.ContainsById(id2);
+            var result = attributes.Contains(id2);
 
 
             // Assert
@@ -169,7 +169,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attributes.ContainsById(id2);
+            var result = attributes.Contains(id2);
 
 
             // Assert
@@ -187,7 +187,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
             // Act
             attributes.Add(attribute);
-            var result = attributes.ContainsById(id1);
+            var result = attributes.Contains(id1);
 
 
             // Assert
@@ -207,7 +207,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
             // Act
             attributes.Add(attribute);
-            var result = attributes.ContainsById(id2);
+            var result = attributes.Contains(id2);
 
 
             // Assert
@@ -228,11 +228,11 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Assert
-            LogAssert.Expect(LogType.Error, "同じIdを持つアトリビュートを追加することはできません。");
             Assert.That
             (
                 () => { attributes.Add(attribute); },
                 Throws.TypeOf<ArgumentException>()
+                .With.Message.EqualTo("同じIdを持つアトリビュートを追加することはできません。")
             );
         }
 
@@ -254,7 +254,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
             // Act
             var result1 = attributes.RemoveById(attribute.Id);
-            var result2 = attributes.ContainsById(attribute.Id);
+            var result2 = attributes.Contains(attribute.Id);
 
 
             // Assert
@@ -278,7 +278,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
             // Act
             var result1 = attributes.RemoveById(attribute.Id);
-            var result2 = attributes.ContainsById(attribute.Id);
+            var result2 = attributes.Contains(attribute.Id);
 
 
             // Assert

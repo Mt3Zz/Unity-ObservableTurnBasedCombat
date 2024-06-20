@@ -6,6 +6,6 @@ namespace ObservableTurnBasedCombat.Application
 {
     public class UniqueCombatUnitStats : CombatUnitStats
     {
-
+        public UniqueCombatUnitStats(UnitStatId id) : base(id) { }
     }
 }

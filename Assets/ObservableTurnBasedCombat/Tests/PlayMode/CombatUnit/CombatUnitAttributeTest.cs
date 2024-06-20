@@ -73,7 +73,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attribute.ContainsById(id);
+            var result = attribute.Contains(id);
 
 
             // Assert
@@ -89,7 +89,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
 
 
             // Act
-            var result = attribute.ContainsById(id2);
+            var result = attribute.Contains(id2);
 
 
             // Assert

@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace ObservableTurnBasedCombat
 {
@@ -41,7 +40,7 @@ namespace ObservableTurnBasedCombat
             }
 
 
-            if (ContainsById(id))
+            if (Contains(id))
             {
                 attribute = _attributeById[id];
                 return true;
@@ -51,7 +50,7 @@ namespace ObservableTurnBasedCombat
             attribute = null;
             return false;
         }
-        public bool ContainsById(UnitAttributeId id)
+        public bool Contains(UnitAttributeId id)
         {
             return _attributeById.Keys.Contains(id);
         }
@@ -62,7 +61,7 @@ namespace ObservableTurnBasedCombat
 
         public bool Contains(ICombatUnitAttribute attribute)
         {
-            return ContainsById(attribute.Id);
+            return Contains(attribute.Id);
         }
         public void Add(ICombatUnitAttribute attribute)
         {
@@ -72,8 +71,7 @@ namespace ObservableTurnBasedCombat
             }
             catch (ArgumentException ex)
             {
-                Debug.LogError("同じIdを持つアトリビュートを追加することはできません。");
-                throw ex;
+                throw new ArgumentException("同じIdを持つアトリビュートを追加することはできません。", ex);
             }
         }
 
