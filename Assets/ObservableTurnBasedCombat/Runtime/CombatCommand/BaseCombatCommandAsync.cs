@@ -22,7 +22,7 @@ namespace ObservableTurnBasedCombat.Application
 
 
         protected List<ICombatCommandEffectAsync> _effects;
-        protected CommandProgressState _state => Metadata.ProgressState;
+        private protected CommandProgressState _state => Metadata.ProgressState;
 
 
         /// <summary>

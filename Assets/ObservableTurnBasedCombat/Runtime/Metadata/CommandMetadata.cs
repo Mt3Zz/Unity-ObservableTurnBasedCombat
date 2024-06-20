@@ -17,7 +17,7 @@ namespace ObservableTurnBasedCombat
         /// <summary>
         /// コマンドの実行状態を取得します。
         /// </summary>
-        public CommandProgressState ProgressState { get; protected set; } = CommandProgressState.NotStarted;
+        internal CommandProgressState ProgressState { get; private protected set; } = CommandProgressState.NotStarted;
 
 
         internal void SetId(CommandId id)
@@ -34,7 +34,7 @@ namespace ObservableTurnBasedCombat
         }
     }
 
-    public struct CommandProgressState : IEquatable<CommandProgressState>
+    internal struct CommandProgressState : IEquatable<CommandProgressState>
     {
         public static readonly CommandProgressState NotStarted = new CommandProgressState(0);
         public static readonly CommandProgressState BeforeExecuted = new CommandProgressState(1);
