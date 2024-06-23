@@ -5,11 +5,15 @@ using UnityEngine;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStat<T> : ICombatUnitStat
+    public class CombatUnitStat<T> : ICombatUnitStat<T>
         where T : struct
     {
         public UnitStatId Id { get; protected set; }
+
         public T Value { get; protected set; }
+
+        public static T InitialValue {  get; protected set; } = default;
+        public static T Default { get; protected set; } = default;
 
 
         public CombatUnitStat(UnitStatId id)
@@ -29,9 +33,12 @@ namespace ObservableTurnBasedCombat.Application
             stat = null;
             return false;
         }
-        public bool Contains(UnitStatId id)
+
+
+        public void Add(ICombatUnitStat stat)
         {
-            return Id.Equals(id);
+            // 単体のステータスでは追加をサポートしない
+            throw new InvalidOperationException("単体のステータスにステータスを追加することはできません。");
         }
         public bool RemoveById(UnitStatId id)
         {
@@ -39,14 +46,14 @@ namespace ObservableTurnBasedCombat.Application
             throw new InvalidOperationException("単体のステータスからステータスを削除することはできません。");
         }
 
+
+        public bool Contains(UnitStatId id)
+        {
+            return Id.Equals(id);
+        }
         public bool Contains(ICombatUnitStat stat)
         {
             return Id.Equals(stat.Id);
-        }
-        public void Add(ICombatUnitStat stat)
-        {
-            // 単体のステータスでは追加をサポートしない
-            throw new InvalidOperationException("単体のステータスにステータスを追加することはできません。");
         }
 
 

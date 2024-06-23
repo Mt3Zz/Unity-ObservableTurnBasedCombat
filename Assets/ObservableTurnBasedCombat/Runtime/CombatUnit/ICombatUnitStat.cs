@@ -9,12 +9,24 @@ namespace ObservableTurnBasedCombat.Application
 
 
         bool TryGetById(UnitStatId id, out ICombatUnitStat attribute);
-        bool Contains(UnitStatId id);
+
+
+        void Add(ICombatUnitStat stat);
         bool RemoveById(UnitStatId id);
 
 
+        bool Contains(UnitStatId id);
         bool Contains(ICombatUnitStat stat);
-        void Add(ICombatUnitStat stat);
+
+    }
+
+    public interface ICombatUnitStat<T> : ICombatUnitStat
+        where T : struct
+    {
+        public T Value { get; }
+
+        public static T InitialValue { get; }
+        public static T Default { get; }
 
     }
 }

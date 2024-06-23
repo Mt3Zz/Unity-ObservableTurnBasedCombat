@@ -30,6 +30,7 @@ namespace ObservableTurnBasedCombat.Application
             }
         }
 
+
         public bool TryGetById(UnitStatId id, out ICombatUnitStat stat)
         {
             if (Id.Equals(id))
@@ -49,19 +50,7 @@ namespace ObservableTurnBasedCombat.Application
             stat = null;
             return false;
         }
-        public bool Contains(UnitStatId id)
-        {
-            return _statById.Keys.Contains(id);
-        }
-        public bool RemoveById(UnitStatId id)
-        {
-            return _statById.Remove(id);
-        }
 
-        public bool Contains(ICombatUnitStat stat)
-        {
-            return Contains(stat.Id);
-        }
         public void Add(ICombatUnitStat stat)
         {
             try
@@ -72,6 +61,19 @@ namespace ObservableTurnBasedCombat.Application
             {
                 throw new ArgumentException("同じIdを持つステータスを追加することはできません。", ex);
             }
+        }
+        public bool RemoveById(UnitStatId id)
+        {
+            return _statById.Remove(id);
+        }
+
+        public bool Contains(UnitStatId id)
+        {
+            return _statById.Keys.Contains(id);
+        }
+        public bool Contains(ICombatUnitStat stat)
+        {
+            return Contains(stat.Id);
         }
 
 

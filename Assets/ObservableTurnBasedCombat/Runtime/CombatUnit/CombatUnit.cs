@@ -1,6 +1,6 @@
-using System.Collections;
+using ObservableCollections;
 using System.Collections.Generic;
-using UnityEngine;
+
 
 namespace ObservableTurnBasedCombat.Application
 {
@@ -17,6 +17,7 @@ namespace ObservableTurnBasedCombat.Application
         public List<CombatUnitStatsModifier> StatsModifiers { get; protected set; }
 
 
-
+        public CombatUnitComponentGraph Graph { get; protected set; }
+        public ObservableDictionary<UnitComponentId, ICombatUnitComponent> ComponentById { get; protected set; }
     }
 }
