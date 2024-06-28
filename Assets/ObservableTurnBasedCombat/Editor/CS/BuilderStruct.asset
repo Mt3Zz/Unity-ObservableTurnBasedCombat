@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 104dbbad01d2ece4ab9ff1a6c22ba1f9, type: 3}
+  m_Name: BuilderStruct
+  m_EditorClassIdentifier: 
+  _items:
+  - isShown: 1
+    name: Developer Tools
+    uxml: {fileID: 9197481963319205126, guid: 8917fd0ab5cd2b84f91b0479e7d9a661, type: 3}
+    childItems: []
+  - isShown: 1
+    name: Unit
+    uxml: {fileID: 9197481963319205126, guid: 75c2a66b67dc5724ab9a4c9c2e22db45, type: 3}
+    childItems:
+    - isShown: 1
+      name: Attribute
+      uxml: {fileID: 0}
+    - isShown: 1
+      name: Stats
+      uxml: {fileID: 0}
+    - isShown: 1
+      name: Timer
+      uxml: {fileID: 0}
+  - isShown: 1
+    name: Command
+    uxml: {fileID: 0}
+    childItems:
+    - isShown: 1
+      name: Command Effect
+      uxml: {fileID: 0}

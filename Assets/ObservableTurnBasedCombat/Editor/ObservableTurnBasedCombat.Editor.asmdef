@@ -1,0 +1,18 @@
+{
+    "name": "ObservableTurnBasedCombat.Editor",
+    "rootNamespace": "ObservableTurnBasedCombat.Editor",
+    "references": [
+        "GUID:a7b2c5efd2d86ac42b3c0a6181f27ae0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
