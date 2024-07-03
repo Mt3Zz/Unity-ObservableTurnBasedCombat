@@ -1,4 +1,5 @@
 using ObservableTurnBasedCombat.Application;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,20 +10,31 @@ namespace ObservableTurnBasedCombat.Application
     {
         public UnitComponentId Id { get; }
         public UnitComponentType Type { get; private set; }
-        public List<CombatUnitComponentLink> Links { get; }
+
+        public HashSet<ICombatUnitComponent> Links { get; }
+
 
         // コンストラクタ
-        public CombatUnitComponent(UnitComponentId id, UnitComponentType type)
+        protected CombatUnitComponent(UnitComponentId id, UnitComponentType type)
         {
             Id = id;
             Type = type;
-            Links = new List<CombatUnitComponentLink>();
+            Links = new HashSet<ICombatUnitComponent>();
         }
 
+
         // エッジを追加するメソッド
-        public void AddLink(CombatUnitComponentLink link)
+        public bool AddLink(ICombatUnitComponent component)
         {
-            Links.Add(link);
+            return Links.Add(component);
+        }
+        public bool RemoveLink(ICombatUnitComponent component)
+        {
+            return Links.Remove(component);
+        }
+        public bool ContainsLink(ICombatUnitComponent component)
+        {
+            return Links.Contains(component);
         }
 
 
