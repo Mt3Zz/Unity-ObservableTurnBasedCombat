@@ -1,24 +1,23 @@
-using ObservableTurnBasedCombat.Application;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public abstract class AbstractCombatUnitComponent : IComponentNode
+    public abstract class BaseCombatUnitComponent : IComponentNode
     {
         public UnitComponentId Id { get; }
         public UnitComponentType Type { get; }
-        public IEnumerable<UnitComponentId> LinkedIds { get => _linkedIds.Cast<UnitComponentId>(); }
 
+        //protected HashSet<UnitComponentId> _requiredLinks = new();
+        //public IEnumerable<UnitComponentId> RequiredLinks { get => _requiredLinks; }
 
         protected HashSet<UnitComponentId> _linkedIds = new();
+        public IEnumerable<UnitComponentId> LinkedIds { get => _linkedIds; }
 
 
         // コンストラクタ
-        protected AbstractCombatUnitComponent
+        protected BaseCombatUnitComponent
             (
             UnitComponentId id, 
             UnitComponentType type,

@@ -9,7 +9,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.CombatUnit
     using Application;
 
 
-    public class CombatUnitComponentTest
+    public class BaseCombatUnitComponentTest
     {
         [Test]
         public void Constructor_SameIdsAndTypes_SameInstance()

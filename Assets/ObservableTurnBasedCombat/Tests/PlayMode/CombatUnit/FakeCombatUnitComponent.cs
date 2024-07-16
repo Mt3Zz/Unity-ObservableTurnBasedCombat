@@ -4,7 +4,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
     using Application;
     using System.Collections.Generic;
 
-    public class FakeCombatUnitComponent : AbstractCombatUnitComponent
+    public class FakeCombatUnitComponent : BaseCombatUnitComponent
     {
         public FakeCombatUnitComponent
             (
