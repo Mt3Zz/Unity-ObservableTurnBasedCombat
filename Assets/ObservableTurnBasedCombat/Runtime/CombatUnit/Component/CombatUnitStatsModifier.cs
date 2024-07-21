@@ -4,10 +4,15 @@ using UnityEngine;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStatsModifier
+    public class CombatUnitStatsModifier : BaseCombatUnitComponent
     {
-        public UnitId Owner { get; private set; }
+        public UnitStatsId TargetStatId { get; protected set; }
 
-        public List<UnitStatId> TargetStatIds { get; protected set; }
+
+        public CombatUnitStatsModifier(UnitStatsModifierId id, UnitStatsId targetStatId)
+            :base(id, UnitComponentType.StatsModefier)
+        {
+            TargetStatId = targetStatId;
+        }
     }
 }

@@ -5,20 +5,23 @@ using System.Linq;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStats<T> : CombatUnitComponent
-        where T : struct
+    public class CombatUnitStats<T> : BaseCombatUnitComponent
+        where T : struct, IComparable, IFormattable, IConvertible, IEquatable<T>, IComparable<T> // T‚ð’lŒ^‚ÉŒÀ’è
     {
         public T BaseValue { get; }
 
         public static T InitialValue { get; }
-        public static T Default { get; }
+        public static T DefaultValue { get; }
 
 
-        //List<ICombatUnitStatsTerm> Terms { get; }
+        List<CombatUnitStatsTerm<T>> Terms { get; }
         //List<ICombatUnitStatsModifier> Modefiers { get; }
 
 
-        public CombatUnitStats(UnitStatId id)
+        //private ComponentGraph<CombatUnitStatsTerm> graph = new();
+
+
+        public CombatUnitStats(UnitStatsId id)
             : base(id, UnitComponentType.Stats)
         {
             

@@ -7,5 +7,12 @@ namespace ObservableTurnBasedCombat
     public class UnitMetadata
     {
         public UnitId Id { get; protected set; }
+
+
+        internal void SetId(UnitId id)
+        {
+            Id = id;
+        }
+
     }
 }

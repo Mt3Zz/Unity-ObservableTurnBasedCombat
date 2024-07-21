@@ -82,10 +82,13 @@ namespace ObservableTurnBasedCombat.Application
     }
     public struct UnitComponentType : IEquatable<UnitComponentType>
     {
-        public static readonly UnitComponentType Attribute = new(0);
-        public static readonly UnitComponentType Stats = new(1);
-        public static readonly UnitComponentType StatsModefier = new(2);
-        public static readonly UnitComponentType Timer = new(3);
+        public static readonly UnitComponentType Attribute = new(101);
+
+        public static readonly UnitComponentType Stats = new(201);
+        public static readonly UnitComponentType StatsTerm = new(202);
+        public static readonly UnitComponentType StatsModefier = new(203);
+
+        public static readonly UnitComponentType Timer = new(301);
 
         public int State { get; }
         private UnitComponentType(int state)

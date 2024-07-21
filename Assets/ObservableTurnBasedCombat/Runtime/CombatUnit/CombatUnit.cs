@@ -1,4 +1,5 @@
 using ObservableCollections;
+using System;
 using System.Collections.Generic;
 
 
@@ -10,14 +11,44 @@ namespace ObservableTurnBasedCombat.Application
         public UnitMetadata Metadata { get; protected set; }
 
 
-        public ICombatUnitAttribute Attributes { get; protected set; }
-        public ICombatUnitStat Stats { get; protected set; }
+        private ICombatUnitRepository _repository;
 
 
-        public List<CombatUnitStatsModifier> StatsModifiers { get; protected set; }
+        public CombatUnit(UnitId id, ICombatUnitRepository repository)
+        {
+            Metadata.SetId(id);
 
 
-        public CombatUnitComponentGraph Graph { get; protected set; }
-        public ObservableDictionary<UnitComponentId, ICombatUnitComponent> ComponentById { get; protected set; }
+            _repository = repository;
+        }
+
+
+        public ComponentGraph<UnitComponentId> Graph { get; protected set; }
+        public ObservableDictionary<UnitComponentId, BaseCombatUnitComponent> ComponentById { get; protected set; }
+
+
+
+        //*
+        public T GetStatsValueById<T>(UnitStatsId id)
+            where T : struct, IComparable, IFormattable, IConvertible, IEquatable<T>, IComparable<T> // T‚ð’lŒ^‚ÉŒÀ’è
+        {
+            var stats = ComponentById[id];
+            var neighborNodeIds = Graph.GetNeighborNodes(id);
+
+
+            T result = default;
+            foreach (var neighborNodeId in neighborNodeIds)
+            {
+                var neighborNode = ComponentById[neighborNodeId];
+                if (!neighborNode.Type.Equals(UnitComponentType.StatsModefier)) continue;
+
+
+
+            }
+
+
+            return result;
+        }
+        //*/
     }
 }
