@@ -40,11 +40,11 @@ namespace ObservableTurnBasedCombat
         /// オブジェクトをJSON形式の文字列にシリアライズします。
         /// </summary>
         /// <returns>シリアライズされたJSON形式の文字列</returns>
-        public string Serialize()
+        public string Serialize(bool prettyPrint = false)
         {
             try
             {
-                return JsonUtility.ToJson(this);
+                return JsonUtility.ToJson(this, prettyPrint);
             }
             catch (Exception ex)
             {

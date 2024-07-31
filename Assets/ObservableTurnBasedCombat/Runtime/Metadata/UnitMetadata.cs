@@ -9,10 +9,9 @@ namespace ObservableTurnBasedCombat
         public UnitId Id { get; protected set; }
 
 
-        internal void SetId(UnitId id)
+        internal UnitMetadata(UnitId id)
         {
             Id = id;
         }
-
     }
 }

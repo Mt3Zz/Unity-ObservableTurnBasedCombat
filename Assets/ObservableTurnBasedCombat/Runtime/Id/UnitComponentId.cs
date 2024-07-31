@@ -1,6 +1,9 @@
 
+using System;
+
 namespace ObservableTurnBasedCombat
 {
+    [Serializable]
     public abstract class UnitComponentId : AbstractCombatId, IComponentNode
     {
         public UnitComponentId(int id, string name) : base(id, name) { }

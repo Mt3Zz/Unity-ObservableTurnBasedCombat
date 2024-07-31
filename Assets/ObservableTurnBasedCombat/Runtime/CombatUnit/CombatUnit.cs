@@ -16,7 +16,7 @@ namespace ObservableTurnBasedCombat.Application
 
         public CombatUnit(UnitId id, ICombatUnitRepository repository)
         {
-            Metadata.SetId(id);
+            Metadata = new(id);
 
 
             _repository = repository;
