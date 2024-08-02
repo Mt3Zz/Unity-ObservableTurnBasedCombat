@@ -25,7 +25,7 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode
 
         public FakeUnitComponent(int identify = 1)
             : base(
-                  new UnitStatsId(1, $"Test{identify}")
+                  new UnitComponentId(1, $"Test{identify}")
                   )
         { }
     }

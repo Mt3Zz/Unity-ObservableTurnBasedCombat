@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStats<T> : BaseCombatUnitComponent
+    public class CombatUnitStats<T> : ObservableUnitComponent
         where T : struct, IComparable, IFormattable, IConvertible, IEquatable<T>, IComparable<T> // T‚ð’lŒ^‚ÉŒÀ’è
     {
         public T BaseValue { get; }
@@ -21,11 +21,9 @@ namespace ObservableTurnBasedCombat.Application
         //private ComponentGraph<CombatUnitStatsTerm> graph = new();
 
 
-        public CombatUnitStats(UnitStatsId id)
-            : base(id, UnitComponentType.Stats)
-        {
-            
-        }
+        public CombatUnitStats(UnitComponentId id)
+            : base(id)
+        { }
 
         public virtual T ApplyModifier()
         {

@@ -21,8 +21,8 @@ namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnit
         [SetUp]
         public void SetUp()
         {
-            id1 = new FakeUnitComponentId(1, "Test1");
-            id2 = new FakeUnitComponentId(1, "Test2");
+            id1 = new UnitComponentId(1, "Test1");
+            id2 = new UnitComponentId(1, "Test2");
         }
 
 

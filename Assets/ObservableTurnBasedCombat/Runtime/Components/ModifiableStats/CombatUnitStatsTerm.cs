@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStatsTerm<T> : BaseCombatUnitComponent
+    public class CombatUnitStatsTerm<T> : ObservableUnitComponent
         where T : struct, IComparable, IFormattable, IConvertible, IEquatable<T>, IComparable<T> // T‚ð’lŒ^‚ÉŒÀ’è
     {
         public T BaseValue { get; }
@@ -13,11 +13,10 @@ namespace ObservableTurnBasedCombat.Application
         List<CombatUnitStatsModifier> _modifiers = new();
 
 
-        public CombatUnitStatsTerm(UnitStatsTermId id, T baseValue , StatsTermType type)
-            :base(id, UnitComponentType.StatsTerm)
+        public CombatUnitStatsTerm(UnitComponentId id, T baseValue)
+            :base(id)
         {
             BaseValue = baseValue;
-            TermType = type;
         }
 
 
