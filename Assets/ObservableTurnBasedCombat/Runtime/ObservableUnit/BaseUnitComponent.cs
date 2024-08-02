@@ -46,5 +46,12 @@ namespace ObservableTurnBasedCombat.Application
         {
             return _requiredLinks.Contains(id);
         }
+
+
+        // コンポーネントをJsonに変換するメソッド
+        public string SerializeToJson(bool prettyPrint = false)
+        {
+            return JsonUtility.ToJson(this, prettyPrint);
+        }
     }
 }

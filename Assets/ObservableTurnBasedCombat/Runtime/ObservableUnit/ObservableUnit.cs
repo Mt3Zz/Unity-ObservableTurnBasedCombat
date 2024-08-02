@@ -12,7 +12,12 @@ namespace ObservableTurnBasedCombat.Application
     [Serializable]
     public class ObservableUnit : IDisposable
     {
-        public UnitId Id { get; }
+        public UnitId Id { get => _id; }
+        [SerializeField] private UnitId _id = default;
+
+        public IEnumerable<ObservableUnitComponent> Components { get => _componentById.Values; }
+        protected Dictionary<UnitComponentId, ObservableUnitComponent> _componentById = new();
+
         public ObservableGraph<ObservableUnitComponent> Graph { get; } = new();
 
 
@@ -35,8 +40,6 @@ namespace ObservableTurnBasedCombat.Application
         private CompositeDisposable _disposables = new();
 
 
-        // IdとコンポーネントのMap
-        protected Dictionary<UnitComponentId, ObservableUnitComponent> ComponentById = new();
         // 変更されたUnitComponentのリスト
         private List<ObservableUnitComponent> _changedComponents = new();
         //*/
@@ -45,7 +48,7 @@ namespace ObservableTurnBasedCombat.Application
         // コンストラクタ
         public ObservableUnit(UnitId id)//, ICombatUnitRepository repository)
         {
-            Id = id;
+            _id = id;
 
             Graph.Changes.Add
                 .Subscribe(OnComponentAdded)
@@ -66,6 +69,8 @@ namespace ObservableTurnBasedCombat.Application
             _snapshotSubject.Dispose();
             _diffSubject.Dispose();
         }
+
+
         /// <summary>
         /// スナップショットと差分をJSON文字列にシリアライズして通知するメソッド
         /// </summary>
@@ -76,7 +81,7 @@ namespace ObservableTurnBasedCombat.Application
             if (_changedComponents.Count == 0) return;
 
 
-            _snapshotSubject.OnNext(CreateJson(ComponentById.Values, prettyPrint));
+            _snapshotSubject.OnNext(CreateJson(_componentById.Values, prettyPrint));
             _diffSubject.OnNext(CreateJson(_changedComponents, prettyPrint));
 
             // 変更のキャッシュをクリア
@@ -88,7 +93,7 @@ namespace ObservableTurnBasedCombat.Application
         // コンポーネントが追加されたときの処理
         private void OnComponentAdded(ObservableUnitComponent component)
         {
-            ComponentById.Add(component.Id, component);
+            _componentById.Add(component.Id, component);
             _changedComponents.Add(component);
 
 
@@ -101,7 +106,7 @@ namespace ObservableTurnBasedCombat.Application
             // リポジトリからフェッチ
             foreach(var requiredLink in component.RequiredLinks)
             {
-                if (!ComponentById.Keys.Contains(requiredLink))
+                if (!_componentById.Keys.Contains(requiredLink))
                 {
                     var additionalComponent = repository.FetchComponentById(requiredLink);
 
@@ -113,7 +118,7 @@ namespace ObservableTurnBasedCombat.Application
         // コンポーネントが削除されたときの処理
         private void OnComponentRemoved(ObservableUnitComponent component)
         {
-            ComponentById.Remove(component.Id);
+            _componentById.Remove(component.Id);
             //_changedComponents.Add(component);
             //component.OnComponentChanged.Subscribe(OnComponentChanged);
         }
