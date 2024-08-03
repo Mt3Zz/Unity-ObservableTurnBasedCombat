@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStats<T> : ObservableUnitComponent
+    public class CombatUnitStats<T> : ObservableUnit.ObservableUnitComponent
         where T : struct, IComparable, IFormattable, IConvertible, IEquatable<T>, IComparable<T> // T‚ð’lŒ^‚ÉŒÀ’è
     {
         public T BaseValue { get; }

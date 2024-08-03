@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ObservableTurnBasedCombat.DataAccess
+namespace ObservableTurnBasedCombat.ObservableUnit
 {
     using Application;
 

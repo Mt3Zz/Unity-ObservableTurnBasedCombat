@@ -4,9 +4,9 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnit
+namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnitTest
 {
-    using Application;
+    using ObservableUnit;
 
 
     public class BaseUnitComponentTest

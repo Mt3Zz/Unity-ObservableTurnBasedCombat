@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ObservableTurnBasedCombat.Application
 {
-    public class CombatUnitStatsModifier : ObservableUnitComponent
+    public class CombatUnitStatsModifier : ObservableUnit.ObservableUnitComponent
     {
         public UnitComponentId TargetStatId { get; protected set; }
 

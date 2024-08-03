@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using R3;
 
 
-namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnit
+namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnitTest
 {
-    using Application;
+    using ObservableUnit;
 
     public class ObservableGraphTest
     {

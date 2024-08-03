@@ -5,7 +5,7 @@ using System.Linq;
 using R3;
 
 
-namespace ObservableTurnBasedCombat.Application
+namespace ObservableTurnBasedCombat.ObservableUnit
 {
     public class ObservableGraph<TNode> : IDisposable
         where TNode : IEquatable<TNode>

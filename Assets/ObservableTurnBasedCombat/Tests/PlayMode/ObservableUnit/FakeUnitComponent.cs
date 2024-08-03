@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 
-namespace ObservableTurnBasedCombat.Tests.PlayMode
+namespace ObservableTurnBasedCombat.Tests.PlayMode.ObservableUnitTest
 {
-    using Application;
+    using ObservableUnit;
 
     [Serializable]
     public class FakeUnitComponent : ObservableUnitComponent

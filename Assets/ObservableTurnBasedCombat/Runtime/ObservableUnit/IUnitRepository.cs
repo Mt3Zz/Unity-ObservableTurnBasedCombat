@@ -1,6 +1,6 @@
 
 
-namespace ObservableTurnBasedCombat.Application
+namespace ObservableTurnBasedCombat.ObservableUnit
 {
     public interface IUnitRepository
     {

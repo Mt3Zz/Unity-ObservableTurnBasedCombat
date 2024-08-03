@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ObservableTurnBasedCombat.Application
+namespace ObservableTurnBasedCombat.ObservableUnit
 {
     [Serializable]
     public abstract class BaseUnitComponent

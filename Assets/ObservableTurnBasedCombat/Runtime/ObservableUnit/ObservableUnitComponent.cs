@@ -5,7 +5,7 @@ using UnityEngine;
 using R3;
 
 
-namespace ObservableTurnBasedCombat.Application
+namespace ObservableTurnBasedCombat.ObservableUnit
 {
     [Serializable]
     public class ObservableUnitComponent : BaseUnitComponent, IEquatable<ObservableUnitComponent>, IDisposable
