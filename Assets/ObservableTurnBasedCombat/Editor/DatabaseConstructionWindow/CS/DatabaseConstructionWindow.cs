@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.SearchService;
 using UnityEditor.UIElements;
-using UnityEditorInternal.VR;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -49,6 +50,10 @@ namespace ObservableTurnBasedCombat.Editor
             //Debug.Log("Create Page Selector : Completed");
 
 
+            // プリファレンスセレクターを作成
+            CreatePreferenceSelector(root);
+
+
             // ページを作成
             CreatePage(root);
         }
@@ -62,7 +67,7 @@ namespace ObservableTurnBasedCombat.Editor
 
 
 
-        private readonly List<TreeViewItemData<string>> _sidebarItems = new();
+        private readonly List<TreeViewItemData<string>> _pageSelectorItems = new();
         private void CreatePageSelector(VisualElement root)
         {
             var treeView = root.Q<TreeView>("page-selector");
@@ -74,7 +79,7 @@ namespace ObservableTurnBasedCombat.Editor
 
 
             // アイテム作成設定
-            treeView.SetRootItems(_sidebarItems);
+            treeView.SetRootItems(_pageSelectorItems);
             treeView.makeItem = () =>
             {
                 var element = new Label();
@@ -97,9 +102,6 @@ namespace ObservableTurnBasedCombat.Editor
         }
         private void ResetPageSelector()
         {
-            _sidebarItems.Clear();
-
-
             var id = 0;
             // ScriptableObjectから構造を取得する
             foreach (var (groupName, enable, uxml, children) in _structure.Structure)
@@ -121,7 +123,7 @@ namespace ObservableTurnBasedCombat.Editor
                 var rootItem = new TreeViewItemData<string>(id++, groupName, items);
 
                 // 親要素をデータソースに追加
-                _sidebarItems.Add(rootItem);
+                _pageSelectorItems.Add(rootItem);
             }
 
 
@@ -150,7 +152,62 @@ namespace ObservableTurnBasedCombat.Editor
             }
 
 
+            //Debug.Log($"Clicked Element : {label.text}");
             RefreshPage(rootVisualElement, label.text);
+        }
+
+
+        private void CreatePreferenceSelector(VisualElement root)
+        {
+            var listView = root.Q<ListView>("preference-selector");
+            if (IsNullElement(listView, "Preference Selector : ListView")) return;
+
+            
+            var list = new List<string>();
+            foreach(var (name, enable, _)  in _structure.PreferenceStructure)
+            {
+                if (enable) list.Add(name);
+            }
+            //Debug.Log($"Preference Selector Items\n{string.Join("\n", list)}");
+
+
+            listView.itemsSource = list;
+            listView.makeItem = () => new Label();
+            listView.bindItem = (item, index) =>
+            {
+                var label = item.Q<Label>();
+                if (IsNullElement(label, "Sidebar : Label")) return;
+
+                var text = (string)listView.itemsSource[index];
+                label.text = text;
+
+                // アイテムがクリックされたときの処理を設定
+                label.RegisterCallback<ClickEvent>(OnReferenceSelectorItemClicked);
+            };
+        }
+        private void OnReferenceSelectorItemClicked(ClickEvent clickEvent)
+        {
+            // クリックされた要素のテキストを取得
+            var element = clickEvent.target as VisualElement;
+
+            var label = element.Q<Label>();
+            if (IsNullElement(label, "クリックされたVisualElement : Label"))
+            {
+                return;
+            }
+
+
+            // ここでは「Player Settings」を開きます。
+            // 他の設定ウィンドウを開きたい場合は、適切なメニューアイテムに変更してください。
+            switch (label.text)
+            {
+                case "Preferences":
+                    SettingsService.OpenProjectSettings("Project/Observable Turn-Based Combat");
+                    break;
+                default:
+                    Debug.Log($"対応する設定ウィンドウが存在しません。\n{label.text}\n");
+                    break;
+            }
         }
 
 
@@ -169,8 +226,10 @@ namespace ObservableTurnBasedCombat.Editor
             page.Clear();
 
             // データ構造からレイアウトを取得して追加
-            var layout = _structure.GetUxmlByName(windowName);
+            var layout = _structure.GetLayoutByName(windowName);
             var container = layout.CloneTree();
+            //var storage = _structure.GetStorageByName(windowName);
+            //var container = new InspectorElement(storage);
             page.Add(container);
         }
 

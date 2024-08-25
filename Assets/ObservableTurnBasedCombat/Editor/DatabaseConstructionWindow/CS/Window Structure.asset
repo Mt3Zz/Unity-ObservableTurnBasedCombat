@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104dbbad01d2ece4ab9ff1a6c22ba1f9, type: 3}
   m_Name: Window Structure
   m_EditorClassIdentifier: 
-  _itemGroups:
+  _pageSelectorItems:
   - item:
       name: Developer Tools
       enable: 1
-      uxml: {fileID: 0}
+      layout: {fileID: 0}
     childItems: []
   - item:
       name: Unit
       enable: 1
-      uxml: {fileID: 0}
-    childItems:
-    - name: Unit Attribute
+      layout: {fileID: 9197481963319205126, guid: c4a3dc7fa86fc2d40a50be5d033ef8df, type: 3}
+    childItems: []
+  - item:
+      name: Unit Component
       enable: 1
-      uxml: {fileID: 0}
-    - name: Unit Stats
-      enable: 1
-      uxml: {fileID: 0}
+      layout: {fileID: 0}
+    childItems: []
   - item:
       name: Command
       enable: 1
-      uxml: {fileID: 0}
-    childItems:
-    - name: Command Effect
-      enable: 1
-      uxml: {fileID: 0}
+      layout: {fileID: 0}
+    childItems: []
+  _preferenceSelectorItems:
+  - name: Preferences
+    enable: 1
+    layout: {fileID: 9197481963319205126, guid: 5b9825e63d28c1440bf70af3ad9ae650, type: 3}

@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="unit-construction" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:Foldout text="Common Config" name="common-config" value="false">
+            <ui:Label text="Components set to &quot;Common Config&quot; apply to all units." name="common-config__description" />
+            <ui:VisualElement name="common-config__edit-field" />
+        </ui:Foldout>
+        <ui:Foldout text="Create new Unit" name="creation-field" value="false">
+            <ui:Label text="The asset will be created in the location specified in &quot;Preference - File Path&quot;." name="creation-field__description" />
+            <ui:VisualElement name="creation-field__edit-field" />
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:Button text="Add" name="creation-field__button" />
+                <ui:Button text="Clear" name="creation-field__button" />
+            </ui:VisualElement>
+        </ui:Foldout>
+        <ui:ScrollView name="configs">
+            <ui:VisualElement name="configs__edit-field" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>
