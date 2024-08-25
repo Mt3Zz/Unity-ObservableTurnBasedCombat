@@ -22,7 +22,9 @@ namespace ObservableTurnBasedCombat
     [Serializable]
     public abstract class AbstractCombatId : IEquatable<AbstractCombatId>
     {
+        public int Id => Id;
         [SerializeField] private int id;
+        public string Name => name;
         [SerializeField] private string name;
 
         /// <summary>
