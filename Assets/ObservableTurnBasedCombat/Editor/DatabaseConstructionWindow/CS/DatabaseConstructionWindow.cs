@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SearchService;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,8 +18,8 @@ namespace ObservableTurnBasedCombat.Editor
 
         // メイン画面レイアウト
         [SerializeField] private VisualTreeAsset _layout = default;
-        // ウィンドウの構造データ
-        [SerializeField] private WindowStructure _structure = default;
+        // メイン画面スタイル
+        [SerializeField] private StyleSheet _style = default;
 
 
         [MenuItem("Window/" + MENU_TITLE)]
@@ -37,200 +35,91 @@ namespace ObservableTurnBasedCombat.Editor
             // ウィンドウのタイトルを変更する
             window.titleContent = new GUIContent(WINDOW_TITLE);
         }
+
+
         private void CreateGUI()
         {
             var root = rootVisualElement;
             _layout.CloneTree(root);
-            //root.styleSheets.Add(_rootStyleSheet);
+            root.styleSheets.Add(_style);
 
 
             // ページセレクターを作成
-            //Debug.Log("Create Page Selector : Started");
             CreatePageSelector(root);
-            //Debug.Log("Create Page Selector : Completed");
 
-
-            // プリファレンスセレクターを作成
-            CreatePreferenceSelector(root);
-
-
-            // ページを作成
-            CreatePage(root);
+            // プリファレンスリンクを作成
+            CreatePreferenceLink(root);
         }
-        private void Reset()
+        private void OnFocus()
         {
-            //Debug.Log("Reset Page Selector : Started");
-            ResetPageSelector();
-            //Debug.Log("Reset Page Selector : Completed");
+            var root = rootVisualElement;
+            CreatePageSelector(root);
         }
 
 
-
-
-        private readonly List<TreeViewItemData<string>> _pageSelectorItems = new();
         private void CreatePageSelector(VisualElement root)
         {
-            var treeView = root.Q<TreeView>("page-selector");
-            // nullチェック
-            if (IsNullElement(treeView, "Side Bar : page selector"))
-            {
-                return;
-            }
+            var sidebar = root.Q<VisualElement>("sidebar");
+            if (IsNullElement(sidebar, "Sidebar")) return;
 
 
-            // アイテム作成設定
-            treeView.SetRootItems(_pageSelectorItems);
-            treeView.makeItem = () =>
-            {
-                var element = new Label();
-                element.name = "page-selector__item";
-
-                return element;
-            };
-            treeView.bindItem = (item, index) =>
-            {
-                var label = item.Q<Label>();
-                if (IsNullElement(label, "Sidebar : Label")) return;
-                label.text = treeView.GetItemDataForIndex<string>(index);
-
-                // アイテムがクリックされたときの処理を設定
-                label.RegisterCallback<ClickEvent>(OnPageSelectorItemClicked);
-            };
-
-
-            treeView.ExpandAll();
+            CreateUnitStorageSelector(sidebar);
         }
-        private void ResetPageSelector()
+        private void CreateUnitStorageSelector(VisualElement root)
         {
-            var id = 0;
-            // ScriptableObjectから構造を取得する
-            foreach (var (groupName, enable, uxml, children) in _structure.Structure)
+            var selector = root.Q<ListView>("unit-storage-selector");
+            if (IsNullElement(selector, "Page Selector : unit-storage-selector")) return;
+
+
+            var preferences = PackagePreferences.instance.UnitPreferences;
+            var storages = preferences.UnitStorages;
+
+
+            selector.itemsSource = storages;
+            selector.makeItem = () =>
             {
-                if (!enable) continue;
+                var label = new Label();
+                label.AddToClassList("unit-storage-selector__items--margin");
+                return label;
+            };
+            selector.bindItem = (element, index) =>
+            {
+                var label = element.Q<Label>();
+                if (IsNullElement(label, "Unit Storage Selector : Item Label")) return;
 
-                // TreeViewItemDataはreadonly structなので
-                // 先にリストをつくって初期化時に入れる必要がある
-                var items = new List<TreeViewItemData<string>>();
-
-                // 子要素を作成
-                foreach (var child in children)
+                label.text = storages[index].name;
+                label.RegisterCallback<ClickEvent>(evt =>
                 {
-                    var item = new TreeViewItemData<string>(id++, child.name);
-                    items.Add(item);
-                }
-
-                // 親要素を作成
-                var rootItem = new TreeViewItemData<string>(id++, groupName, items);
-
-                // 親要素をデータソースに追加
-                _pageSelectorItems.Add(rootItem);
-            }
-
-
-            /* Log Message for Debug
-            var msg = "";
-            foreach(var item in _sidebarItems)
-            {
-                msg += $"item.data : {item.data}\n";
-                foreach(var child in item.children)
-                {
-                    msg += $"    child.data : {child.data}\n";
-                }
-            }
-            Debug.Log(msg);
-            //*/
-        }
-        private void OnPageSelectorItemClicked(ClickEvent clickEvent)
-        {
-            // クリックされた要素のテキストを取得
-            var element = clickEvent.target as VisualElement;
-
-            var label = element.Q<Label>();
-            if (IsNullElement(label, "クリックされたVisualElement : Label"))
-            {
-                return;
-            }
-
-
-            //Debug.Log($"Clicked Element : {label.text}");
-            RefreshPage(rootVisualElement, label.text);
-        }
-
-
-        private void CreatePreferenceSelector(VisualElement root)
-        {
-            var listView = root.Q<ListView>("preference-selector");
-            if (IsNullElement(listView, "Preference Selector : ListView")) return;
-
-            
-            var list = new List<string>();
-            foreach(var (name, enable, _)  in _structure.PreferenceStructure)
-            {
-                if (enable) list.Add(name);
-            }
-            //Debug.Log($"Preference Selector Items\n{string.Join("\n", list)}");
-
-
-            listView.itemsSource = list;
-            listView.makeItem = () => new Label();
-            listView.bindItem = (item, index) =>
-            {
-                var label = item.Q<Label>();
-                if (IsNullElement(label, "Sidebar : Label")) return;
-
-                var text = (string)listView.itemsSource[index];
-                label.text = text;
-
-                // アイテムがクリックされたときの処理を設定
-                label.RegisterCallback<ClickEvent>(OnReferenceSelectorItemClicked);
+                    var storage = storages[index];
+                    RefreshPage(storage);
+                });
             };
         }
-        private void OnReferenceSelectorItemClicked(ClickEvent clickEvent)
+
+
+        private void CreatePreferenceLink(VisualElement root)
         {
-            // クリックされた要素のテキストを取得
-            var element = clickEvent.target as VisualElement;
+            var button = root.Q<Button>("preference-link__button");
+            if (IsNullElement(button, "Preference Selector : Button")) return;
 
-            var label = element.Q<Label>();
-            if (IsNullElement(label, "クリックされたVisualElement : Label"))
+
+            button.clicked += () =>
             {
-                return;
-            }
-
-
-            // ここでは「Player Settings」を開きます。
-            // 他の設定ウィンドウを開きたい場合は、適切なメニューアイテムに変更してください。
-            switch (label.text)
-            {
-                case "Preferences":
-                    SettingsService.OpenProjectSettings("Project/Observable Turn-Based Combat");
-                    break;
-                default:
-                    Debug.Log($"対応する設定ウィンドウが存在しません。\n{label.text}\n");
-                    break;
-            }
+                SettingsService.OpenProjectSettings("Project/Observable Turn-Based Combat");
+            };
         }
 
 
-        private void CreatePage(VisualElement root)
+        private void RefreshPage(ObservableUnit.UnitConfigStorage storage)
         {
-            var firstWindowName = _structure.GetFirstWindowNameOrEmpty();
-            RefreshPage(root, firstWindowName);
-        }
-        private void RefreshPage(VisualElement root, string windowName)
-        {
-            var page = rootVisualElement.Q<ScrollView>(name: "content");
-            if (IsNullElement(page, "Database Construction Window : Page")) return;
+            var page = rootVisualElement.Q<ScrollView>("content");
+            if (IsNullElement(page, "Content : page")) return;
 
 
-            // 表示中のページをクリア
+            var inspector = new InspectorElement(storage);
+
             page.Clear();
-
-            // データ構造からレイアウトを取得して追加
-            var layout = _structure.GetLayoutByName(windowName);
-            var container = layout.CloneTree();
-            //var storage = _structure.GetStorageByName(windowName);
-            //var container = new InspectorElement(storage);
-            page.Add(container);
+            page.Add(inspector);
         }
 
 

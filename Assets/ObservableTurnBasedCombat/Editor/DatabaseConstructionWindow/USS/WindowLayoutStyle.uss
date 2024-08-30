@@ -8,14 +8,38 @@ VisualElement {
     flex-direction: row;
 }
 
-.otbc-side-bar {
+.sidebar--flex-grow {
     flex-grow: 1;
-    background-color: rgba(0, 0, 0, 0);
+}
+
+.sidebar--size {
     max-width: 160px;
     min-width: 160px;
-    -unity-text-align: middle-left;
+}
+
+.sidebar--margin {
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.sidebar--text {
+    -unity-text-align: middle-left;
+}
+
+.sidebar__content--grow {
+    flex-grow: 1;
+}
+
+.sidebar__footer--grow {
+    flex-shrink: 0;
+}
+
+.preference-selector__button--text {
+    -unity-text-align: middle-left;
+}
+
+.unit-storage-selector__items--margin {
+    margin-left: 20px;
 }
